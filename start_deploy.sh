@@ -169,7 +169,7 @@ docker run -p 22 -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH -v $FAST_DATA_PATH:$FAST
 -e BIOFORMAT_ENABLED=$BIOFORMAT_ENABLED \
 -e BIOFORMAT_LOCATION=$BIOFORMAT_ALIAS \
 -e BIOFORMAT_PORT=$BIOFORMAT_PORT \
-cytomineuliege/ims > /dev/null
+neubiaswg5/ims > /dev/null
 nb_docker=$((nb_docker+1))
 
 # add a dynamic link to bioformat
@@ -212,7 +212,7 @@ docker run -m 8g -d -p 22 --name core --link rabbitmq:rabbitmq --link db:db --li
 -e SENDER_EMAIL_PASS=$SENDER_EMAIL_PASS \
 -e SENDER_EMAIL_SMTP_HOST=$SENDER_EMAIL_SMTP_HOST \
 -e SENDER_EMAIL_SMTP_PORT=$SENDER_EMAIL_SMTP_PORT \
-cytomineuliege/core > /dev/null
+neubiaswg5/core > /dev/null
 nb_docker=$((nb_docker+1))
 
 # create retrieval docker
