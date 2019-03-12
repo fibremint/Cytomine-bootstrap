@@ -15,10 +15,10 @@ cytomine.iipImageServerCyto=http://$IIP_CYTO_URL/fcgi-bin/iipsrv.fcgi
 cytomine.iipImageServerJpeg2000=http://$IIP_JP2_URL/fcgi-bin/iipsrv.fcgi
 
 bioformat.application.enabled=$BIOFORMAT_ENABLED
-bioformat.application.location=bioformat
+bioformat.application.location=$BIOFORMAT_ALIAS
 bioformat.application.port=4321
 
-cytomine.Jpeg2000Enabled=true
+cytomine.Jpeg2000Enabled=$IIP_JP2_ENABLED
 cytomine.deleteImageFilesFrequency=900000
 
 cytomine.vips=/usr/local/bin/vips

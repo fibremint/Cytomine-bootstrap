@@ -14,13 +14,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILES=(configs/core/cytomineconfig.groovy configs/ims/imageserverconfig.properties configs/iipCyto/nginx.conf.sample configs/iipCyto/iip-configuration.sh configs/iipJP2/nginx.conf.sample configs/iris/iris-config.groovy configs/iris/iris-production-config.groovy configs/nginx/nginx.conf configs/nginx/nginxDevCore.conf configs/nginx/nginxDevIMS.conf configs/software_router/config.groovy start_deploy.sh dev_core_start_deploy.sh hosts/core/addHosts.sh hosts/ims/addHosts.sh hosts/retrieval/addHosts.sh hosts/iris/addHosts.sh hosts/software_router/addHosts.sh hosts/slurm/addHosts.sh)
+# Get all the config values.
+. utils/files.sh
+. utils/keys.sh
+. configuration.sh
+. configuration-versions.sh
 
-#get all the config values.
-. ./configuration.sh
-. ./versions.sh
-. ./keys.sh
-
+# Fix container aliases for core/ims development
+ALIASES=('POSTGRES_ALIAS' 'MONGODB_ALIAS' 'RABBITMQ_ALIAS' 'BIOFORMAT_ALIAS')
+POSTGRES_ALIAS=postgresql
+MONGODB_ALIAS=mongodb
+RABBITMQ_ALIAS=rabbitmq
+BIOFORMAT_ALIAS=bioformat
+if [[ $CORE_DEVELOPMENT = true ]]; then
+    POSTGRES_ALIAS=localhost
+    MONGODB_ALIAS=localhost
+    RABBITMQ_ALIAS=localhost
+fi
+if [[ $IMS_DEVELOPMENT = true ]]; then
+    BIOFORMAT_ALIAS=localhost
+fi
 
 VARIABLES=()
 while read LINE; do
@@ -35,9 +48,10 @@ while read LINE; do
         IFS='=' read -ra ADDR <<< "$LINE"
         VARIABLES+=(${ADDR[0]})
     fi
-done  <<< "$(cat versions.sh)"
+done  <<< "$(cat configuration-versions.sh)"
 
 VARIABLES=("${VARIABLES[@]}" "${KEYS[@]}")
+VARIABLES=("${VARIABLES[@]}" "${ALIASES[@]}")
 
 for i in ${FILES[@]}; do
     if [[ -f "$i.sample" ]]; then
@@ -56,9 +70,41 @@ for i in ${FILES[@]}; do
         if [[ "$OSTYPE" == "linux-gnu" ]]; then
             sed -i "s~\$IRIS_ADMIN_NAME~$IRIS_ADMIN_NAME~g" $i
             sed -i "s~\$IRIS_ADMIN_ORGANIZATION_NAME~$IRIS_ADMIN_ORGANIZATION_NAME~g" $i
+            if [[ $IRIS_ENABLED = false ]]; then sed -i "/--link iris:iris/d" $i; fi
+            if [[ $RETRIEVAL_ENABLED = false ]]; then sed -i "/--link retrieval:retrieval/d" $i; fi
+            if [[ $BIOFORMAT_ENABLED = false ]]; then sed -i "/--link bioformat:bioformat/d" $i; fi
+            if [[ $IIP_JP2_ENABLED = false ]]; then sed -i "/--link iipJP2:iipJP2/d" $i; fi
+            if [[ $SOFTWARE_ENABLED = false ]]; then sed -i "/--link rabbitmq:rabbitmq/d" $i; fi
+            if [[ $CORE_DEVELOPMENT = true ]]; then
+                sed -i "/--link core:core/d" $i
+            else
+                sed -i "/-p 5672:5672 -p 15672:15672/d" $i
+                sed -i "/-p 5432:5432/d" $i
+                sed -i "/-p 27017:27017 -p 28017:28017/d" $i
+                sed -i "/-p 10022:22/d" $i
+                sed -i "/-p 22/d" $i
+            fi
+            if [[ $IMS_DEVELOPMENT = true ]]; then sed -i "/--link ims:ims/d" $i; fi
         elif [[ "$OSTYPE" == "darwin"* ]]; then
             sed -i '' -e "s~\$IRIS_ADMIN_NAME~$IRIS_ADMIN_NAME~g" $i
             sed -i '' -e "s~\$IRIS_ADMIN_ORGANIZATION_NAME~$IRIS_ADMIN_ORGANIZATION_NAME~g" $i
+            if [[ $IRIS_ENABLED = false ]]; then sed -i '' -e "/--link iris:iris/d" $i; fi
+            if [[ $RETRIEVAL_ENABLED = false ]]; then sed -i '' -e "/--link retrieval:retrieval/d" $i; fi
+            if [[ $BIOFORMAT_ENABLED = false ]]; then sed -i '' -e "/--link bioformat:bioformat/d" $i; fi
+            if [[ $IIP_JP2_ENABLED = false ]]; then sed -i '' -e "/--link iipJP2:iipJP2/d" $i; fi
+            if [[ $SOFTWARE_ENABLED = false ]]; then sed -i '' -e "/--link rabbitmq:rabbitmq/d" $i; fi
+            if [[ $CORE_DEVELOPMENT = true ]]; then 
+                sed -i '' -e "/--link core:core/d" $i
+            else
+                sed -i '' -e "/-p 5672:5672 -p 15672:15672/d" $i
+                sed -i '' -e "/-p 5432:5432/d" $i
+                sed -i '' -e "/-p 27017:27017 -p 28017:28017/d" $i
+                sed -i '' -e "/-p 10022:22/d" $i
+                sed -i '' -e "/-p 22/d" $i
+            fi
+            if [[ $IMS_DEVELOPMENT = true ]]; then sed -i '' -e "/--link ims:ims/d" $i; fi
         fi
     fi
 done
+
+mv utils/start.sh ./start.sh

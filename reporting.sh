@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#
 # Copyright (c) 2009-2018. Authors: see NOTICE file.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,34 +13,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-rm -r ./reporting.tgz
 
-mkdir -p ./reporting
+DIR=reporting-$(date +%Y-%m-%d_%H-%M-%S)
+mkdir -p $DIR
 
-docker cp retrieval:/tmp/retrieval.log ./reporting/catalinaRetrieval.out
-tail -n 200 ./reporting/catalinaRetrieval.out      > ./reporting/catalinaRetrievalTail.out
-mv ./reporting/catalinaRetrievalTail.out             ./reporting/catalinaRetrieval.out
+cp ./start.sh $DIR/start.sh
+cp -r ./configs $DIR/configs
+cp -r ./hosts $DIR/hosts
+cp ./configuration-versions.sh $DIR/configuration-versions.sh
 
-docker cp iipOff:/tmp/iip-openslide.out ./reporting/logIIPOff.out
-tail -n 200 ./reporting/logIIPOff.out           > ./reporting/logIIPOffTail.out
-mv ./reporting/logIIPOffTail.out                  ./reporting/logIIPOff.out
+docker logs nginx &> $DIR/log-nginx.out
+docker logs memcached &> $DIR/log-memcached.out
+docker logs mongodb &> $DIR/log-mongodb.out
+docker logs postgresql &> $DIR/log-postgresql.out
+docker logs iipCyto &> $DIR/log-iipCyto.out
+if [[ "$(docker ps -q -f name=rabbitmq)" ]]; then docker logs rabbitmq &> $DIR/log-rabbitmq.out; fi
+if [[ "$(docker ps -q -f name=backup_mongo)" ]]; then docker logs backup_mongo &> $DIR/log-backup_mongo.out; fi
+if [[ "$(docker ps -q -f name=backup_postgis)" ]]; then docker logs backup_postgis &> $DIR/log-backup_postgis.out; fi
+if [[ "$(docker ps -q -f name=retrieval)" ]]; then docker logs retrieval &> $DIR/log-retrieval.out; fi
+if [[ "$(docker ps -q -f name=iipJP2)" ]]; then docker logs iipJP2 &> $DIR/log-iipJP2.out; fi
+if [[ "$(docker ps -q -f name=bioformat)" ]]; then docker logs bioformat &> $DIR/log-bioformat.out; fi
+if [[ "$(docker ps -q -f name=ims)" ]]; then docker logs ims &> $DIR/log-ims.out; fi
+if [[ "$(docker ps -q -f name=core)" ]]; then docker logs core &> $DIR/log-core.out; fi
+if [[ "$(docker ps -q -f name=iris)" ]]; then docker logs iris &> $DIR/log-iris.out; fi
+if [[ "$(docker ps -q -f name=software_router)" ]]; then docker logs software_router &> $DIR/log-software_router.out; fi
+if [[ "$(docker ps -q -f name=slurm)" ]]; then docker logs slurm &> $DIR/log-slurm.out; fi
 
-docker cp iipCyto:/tmp/iip-openslide.out ./reporting/logIIPCyto.out
-tail -n 200 ./reporting/logIIPCyto.out          > ./reporting/logIIPCytoTail.out
-mv ./reporting/logIIPCytoTail.out                 ./reporting/logIIPCyto.out
-
-cp configs/ims/imageserverconfig.properties ./reporting/configurationIMS.properties
-docker cp ims:/var/lib/tomcat7/logs/catalina.out ./reporting/catalinaIMS.out
-tail -n 500 ./reporting/catalinaIMS.out            > ./reporting/catalinaIMSTail.out
-mv ./reporting/catalinaIMSTail.out                   ./reporting/catalinaIMS.out
-
-cp configs/core/cytomineconfig.groovy ./reporting/configurationCore.groovy
-docker cp core:/var/lib/tomcat7/logs/catalina.out ./reporting/catalinaCore.out
-tail -n 500 ./reporting/catalinaCore.out           > ./reporting/catalinaCoreTail.out
-mv ./reporting/catalinaCoreTail.out                  ./reporting/catalinaCore.out
-
-cp ./start_deploy.sh ./reporting/start_deploy.sh
-
-tar -zcvf reporting.tgz reporting
-rm -r ./reporting
+tar -zcvf $DIR.tar.gz $DIR
+rm -r $DIR

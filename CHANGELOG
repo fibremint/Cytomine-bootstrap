@@ -1,3 +1,12 @@
+10-01-2019 :
+ - Renamed clean_docker_keep_data.sh to stop.sh
+ - Renamed start_deploy.sh to start.sh
+ - Add new clean_config.sh script
+ - Update reporting.sh script
+ - Clarify configuration.sh and add link to reference documentation
+ - New enable/disable plugin parameters (RETRIEVAL_ENABLED, IRIS_ENABLED, BACKUP_ENABLED, IIP_JP2_ENABLED, SOFTWARE_ENABLED)
+ - New development environment parameters (CORE_DEVELOPMENT, IMS_DEVELOPMENT)
+ - Move backup scripts out of utils folders.
 23-08-2018 : v1.2. New bootstrap architecture. The installation procedure has changed :
  - Running the init.sh script after filling the configuration file is mandatory;
  - Also, postgres has been updated, you need to backup databases, clean containers, delete postgres volumes then restart and restore data. You can do it by running the scripts in the utils folder.

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#
-# Copyright (c) 2009-2017. Authors: see NOTICE file.
+# Copyright (c) 2009-2019. Authors: see NOTICE file.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,37 +13,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+#################################### Usage ####################################
 #
+# bash ./inject_demo_data.sh ADMIN_PUBLIC_KEY ADMIN_PRIVATE_KEY
+# where ADMIN_*_KEY are the API keys of the automatically created "admin" user.
+# In the webUI, you can find them at the end of "Account" page.
 
-###### RUN ME WITH: sh ./inject_demo_data.sh $SUPERADMIN_PUB_KEY $SUPERADMIN_PRIV_KEY
+# If you just installed Cytomine, you can run this script without any argument
+# as the admin keys stored in this script are still valid.
+###############################################################################
 
-#get all the config values.
+. utils/keys.sh
 . ./configuration.sh
+. ./configuration-versions.sh
 
-# create test docker
-docker run -d -p 22 \
---name data_for_test \
--e IS_LOCAL=$IS_LOCAL \
+docker create --rm --name project_migrator \
 -e CORE_URL=$CORE_URL \
--e IMS_URLS=$IMS_URLS \
 -e UPLOAD_URL=$UPLOAD_URL \
--e PUBLIC_KEY=$SUPERADMIN_PUB_KEY \
--e PRIVATE_KEY=$SUPERADMIN_PRIV_KEY \
-cytomine/data_for_test > /dev/null
+-e PUBLIC_KEY=${1:-$ADMIN_PUB_KEY} \
+-e PRIVATE_KEY=${2:-$ADMIN_PRIV_KEY} \
+$PROJECT_MIGRATOR_NAMESPACE/project_migrator:$PROJECT_MIGRATOR_VERSION import /tmp/projects.txt
 
-
-OUTPUT_DATA_CYTOMINE=$(docker logs data_for_test)
-COUNTER_CYTOMINE=0
-while [ "${OUTPUT_DATA_CYTOMINE#*END OF DATA INJECTION}" = "$OUTPUT_DATA_CYTOMINE" ] && [ $COUNTER_CYTOMINE -le 45 ]
-do
-   OUTPUT_DATA_CYTOMINE=$(docker logs data_for_test)
-   OUTPUT_DATA_CYTOMINE=$(echo "$OUTPUT_DATA_CYTOMINE" | tail -n 100)
-   COUNTER_CYTOMINE=$((COUNTER_CYTOMINE+1))
-   sleep 60
-done
-if [ "${OUTPUT_DATA_CYTOMINE#*DATA SUCCESSFULLY INJECTED}" = "$OUTPUT_DATA_CYTOMINE" ]
-then
-   echo "Data are not plainfully injected. Please check the status with the command docker logs data_for_test."
-else
-   echo "Data successfully injected."
-fi
+docker cp $PWD/configs/project_migrator/projects.txt project_migrator:/tmp/projects.txt
+docker cp $PWD/hosts/project_migrator/addHosts.sh project_migrator:/tmp/addHosts.sh
+docker start -ai project_migrator

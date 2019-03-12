@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+
 # Copyright (c) 2009-2018. Authors: see NOTICE file.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,14 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
 path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 cd $path
 
-#sh create_docker_images.sh
-echo "clean containers"
-sh clean_docker_keep_data.sh > /dev/null
-echo "launch new containers"
-sh start_deploy.sh
-
+echo "Cytomine is restarting..."
+echo "1/ Stop running containers..."
+bash stop.sh
+echo "2/ Launch new containers..."
+bash start.sh

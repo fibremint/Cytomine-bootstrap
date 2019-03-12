@@ -1,0 +1,5 @@
+https://github.com/Cytomine-ULiege/Cytomine-sample-projects/raw/master/DEMO-CELL-CLASSIFICATION.tar.gz
+https://github.com/Cytomine-ULiege/Cytomine-sample-projects/raw/master/DEMO-CELL-COUNTING.tar.gz
+https://github.com/Cytomine-ULiege/Cytomine-sample-projects/raw/master/DEMO-LANDMARK-ZEBRAFISH.tar.gz
+https://github.com/Cytomine-ULiege/Cytomine-sample-projects/raw/master/DEMO-SEGMENTATION-TISSUE.tar.gz
+https://github.com/Cytomine-ULiege/Cytomine-sample-projects/raw/master/DEMO-VARIOUS-FORMATS.tar.gz

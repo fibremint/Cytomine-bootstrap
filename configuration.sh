@@ -1,4 +1,3 @@
-#
 # Copyright (c) 2009-2018. Authors: see NOTICE file.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,64 +11,100 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+
+# -----------------------------------------------------------------------------
+# Check Cytomine configuration reference for details:
+# > https://doc.cytomine.be/display/PubOp/Cytomine+configuration+reference
 #
+# Advanced configuration should be edited only if you know what you are doing.
+# -----------------------------------------------------------------------------
 
-#URLs
+
+
+#------------------------------------------------------------------------------
+# CORE
+#------------------------------------------------------------------------------
 CORE_URL=localhost-core
-IMS_URL1=localhost-ims
-UPLOAD_URL=localhost-upload
-IRIS_URL=localhost-iris
-RETRIEVAL_URL=localhost-retrieval
-
-
-#Paths
-IMS_STORAGE_PATH=/data/images
-IMS_BUFFER_PATH=/data/_buffer
-SOFTWARE_CODE_PATH=/data/softwares/code
-SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
-JOBS_PATH=/data/jobs
-SERVER_SSHKEYS_PATH=/data/ssh
-RETRIEVAL_PATH=/data/thumb
-FAST_DATA_PATH=/data/images
-BACKUP_PATH=/data/backup
-
-
-#Backups
-# BACKUP_BOOL : backup active or not
-BACKUP_BOOL=false
-# SENDER_EMAIL, SENDER_EMAIL_PASS, SENDER_EMAIL_SMTP : email params of the sending account
-SENDER_EMAIL_PASS='passwd'
 SENDER_EMAIL_SMTP_HOST='smtp.gmail.com'
 SENDER_EMAIL_SMTP_PORT='587'
+SENDER_EMAIL_PASS='passwd'
 SENDER_EMAIL='your.email@gmail.com'
-# RECEIVER_EMAIL : email address of the receiver
+
+# Advanced configuration.
+CORE_DEVELOPMENT=false
+
+#------------------------------------------------------------------------------
+# IMS
+#------------------------------------------------------------------------------
+IMS_URL1=localhost-ims
+UPLOAD_URL=localhost-upload
+
+IMS_STORAGE_PATH=/data/images
+IMS_BUFFER_PATH=/data/_buffer
+FAST_DATA_PATH=/data/images
+
+# Advanced configuration.
+IMS_DEVELOPMENT=false
+
+IIP_OFF_URL=localhost-iip-cyto
+IIP_CYTO_URL=localhost-iip-cyto
+MEMCACHED_PASS="mypass"
+NB_IIP_PROCESS=10
+
+#------------------------------------------------------------------------------
+# PLUGIN: BACKUP
+#------------------------------------------------------------------------------
+BACKUP_ENABLED=false
 RECEIVER_EMAIL='receiver@XXX.com'
+BACKUP_PATH=/data/backup
 
+#------------------------------------------------------------------------------
+# PLUGIN: RETRIEVAL
+#------------------------------------------------------------------------------
+RETRIEVAL_ENABLED=true
+RETRIEVAL_URL=localhost-retrieval
+RETRIEVAL_PATH=/data/thumb
 
-#middlewares
+# Advanced configuration.
 RETRIEVAL_PASSWORD='retrieval_default'
-RABBITMQ_LOGIN="router"
-RABBITMQ_PASSWORD="router"
+RETRIEVAL_ENGINE=redis #possible values : memory, redis
 
+#------------------------------------------------------------------------------
+# PLUGIN: BIOFORMAT
+#------------------------------------------------------------------------------
+BIOFORMAT_ENABLED=true
 
-#IRIS
+#------------------------------------------------------------------------------
+# PLUGIN: IIP-JP2 (JPEG 2000 native support)
+#------------------------------------------------------------------------------
+IIP_JP2_ENABLED=false
+
+# Advanced configuration.
+IIP_JP2_URL=localhost-iip-jp2000
+
+#------------------------------------------------------------------------------
+# PLUGIN: IRIS
+#------------------------------------------------------------------------------
 IRIS_ENABLED=false
-IRIS_ID="LOCAL_CYTOMINE_IRIS"
+IRIS_URL=localhost-iris
 IRIS_ADMIN_NAME="Ian Admin"
 IRIS_ADMIN_ORGANIZATION_NAME="University of Somewhere, Department of Whatever"
 IRIS_ADMIN_EMAIL="ian.admin@somewhere.edu"
 
+# Advanced configuration.
+IRIS_ID="LOCAL_CYTOMINE_IRIS"
 
-# ADVANCED CONFIGURATION
-# ---------------------------
-IIP_OFF_URL=localhost-iip-cyto
-IIP_CYTO_URL=localhost-iip-cyto
-IIP_JP2_URL=localhost-iip-jp2000
+#------------------------------------------------------------------------------
+# PLUGIN: SOFTWARE
+#------------------------------------------------------------------------------
+SOFTWARE_ENABLED=true
+SOFTWARE_CODE_PATH=/data/softwares/code
+SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
+JOBS_PATH=/data/jobs
+SERVER_SSHKEYS_PATH=/data/ssh
 
-RETRIEVAL_ENGINE=redis #possible values : memory, redis
-MEMCACHED_PASS="mypass"
-NB_IIP_PROCESS=10
-
-BIOFORMAT_ENABLED=true
-BIOFORMAT_ALIAS="bioformat"
-BIOFORMAT_PORT="4321"
+# Advanced configuration.
+RABBITMQ_LOGIN="router"
+RABBITMQ_PASSWORD="router"

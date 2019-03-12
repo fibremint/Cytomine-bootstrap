@@ -1,4 +1,4 @@
-dataSource.url='jdbc:postgresql://postgresql:5432/docker'
+dataSource.url='jdbc:postgresql://$POSTGRES_ALIAS:5432/docker'
 dataSource.username='docker'
 dataSource.password='docker'
 
@@ -27,6 +27,15 @@ storage_buffer='$IMS_BUFFER_PATH'
 storage_path='$IMS_STORAGE_PATH'
 fast_data_path='$FAST_DATA_PATH'
 
+grails.iris.enabled=$IRIS_ENABLED
+grails.retrieval.enabled=$RETRIEVAL_ENABLED
+grails.backup.enabled=$BACKUP_ENABLED
+grails.bioformat.enabled=$BIOFORMAT_ENABLED
+grails.iipJP2.enabled=$IIP_JP2_ENABLED
+grails.software.enabled=$SOFTWARE_ENABLED
+grails.core.dev=$CORE_DEVELOPMENT
+grails.ims.dev=$IMS_DEVELOPMENT
+
 grails.adminPassword='$ADMIN_PWD'
 grails.adminPrivateKey='$ADMIN_PRIV_KEY'
 grails.adminPublicKey='$ADMIN_PUB_KEY'
@@ -42,13 +51,13 @@ grails.notification.password='$SENDER_EMAIL_PASS'
 grails.notification.smtp.host='$SENDER_EMAIL_SMTP_HOST'
 grails.notification.smtp.port='$SENDER_EMAIL_SMTP_PORT'
 
-grails.mongo.host = 'mongodb'
+grails.mongo.host = '$MONGODB_ALIAS'
 grails.mongo.options.connectionsPerHost=50
 grails.mongo.options.threadsAllowedToBlockForConnectionMultiplier=10
 
 grails.retrievalUsername = 'cytomine'
 grails.retrievalPassword = '$RETRIEVAL_PASSWORD'
 
-grails.messageBrokerServerURL='rabbitmq:5672'
+grails.messageBrokerServerURL='$RABBITMQ_ALIAS:5672'
 
 grails.serverID='$SERVER_ID'
