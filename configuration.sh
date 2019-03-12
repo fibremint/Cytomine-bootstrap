@@ -21,12 +21,34 @@
 # Advanced configuration should be edited only if you know what you are doing.
 # -----------------------------------------------------------------------------
 
-
-
 #------------------------------------------------------------------------------
-# CORE
+# BIAFLOWS configuration
 #------------------------------------------------------------------------------
+
+# These URLs have to be accessible (add them to /etc/hosts if you run it locally)
 CORE_URL=localhost-core
+IMS_URL1=localhost-ims
+UPLOAD_URL=localhost-upload
+
+# These paths must exist
+IMS_STORAGE_PATH=/data/images
+IMS_BUFFER_PATH=/data/_buffer
+FAST_DATA_PATH=/data/images
+SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
+SERVER_SSHKEYS_PATH=/data/ssh
+
+###############################################################################
+###############################################################################
+###############################################################################
+#------------------------------------------------------------------------------
+# ADVANCED CYTOMINE CONFIGURATION
+# - Do not touch instead you know what you are doing.
+#------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+# Core
+#------------------------------------------------------------------------------
 SENDER_EMAIL_SMTP_HOST='smtp.gmail.com'
 SENDER_EMAIL_SMTP_PORT='587'
 SENDER_EMAIL_PASS='passwd'
@@ -38,13 +60,6 @@ CORE_DEVELOPMENT=false
 #------------------------------------------------------------------------------
 # IMS
 #------------------------------------------------------------------------------
-IMS_URL1=localhost-ims
-UPLOAD_URL=localhost-upload
-
-IMS_STORAGE_PATH=/data/images
-IMS_BUFFER_PATH=/data/_buffer
-FAST_DATA_PATH=/data/images
-
 # Advanced configuration.
 IMS_DEVELOPMENT=false
 
@@ -63,7 +78,7 @@ BACKUP_PATH=/data/backup
 #------------------------------------------------------------------------------
 # PLUGIN: RETRIEVAL
 #------------------------------------------------------------------------------
-RETRIEVAL_ENABLED=true
+RETRIEVAL_ENABLED=false
 RETRIEVAL_URL=localhost-retrieval
 RETRIEVAL_PATH=/data/thumb
 
@@ -79,7 +94,7 @@ BIOFORMAT_ENABLED=true
 #------------------------------------------------------------------------------
 # PLUGIN: IIP-JP2 (JPEG 2000 native support)
 #------------------------------------------------------------------------------
-IIP_JP2_ENABLED=false
+IIP_JP2_ENABLED=true
 
 # Advanced configuration.
 IIP_JP2_URL=localhost-iip-jp2000
@@ -101,9 +116,7 @@ IRIS_ID="LOCAL_CYTOMINE_IRIS"
 #------------------------------------------------------------------------------
 SOFTWARE_ENABLED=true
 SOFTWARE_CODE_PATH=/data/softwares/code
-SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
 JOBS_PATH=/data/jobs
-SERVER_SSHKEYS_PATH=/data/ssh
 
 # Advanced configuration.
 RABBITMQ_LOGIN="router"

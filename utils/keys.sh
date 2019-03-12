@@ -15,7 +15,7 @@
 # limitations under the License.
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    ADMIN_PWD=$(cat /proc/sys/kernel/random/uuid)
+    ADMIN_PWD=admin
     ADMIN_PUB_KEY=$(cat /proc/sys/kernel/random/uuid)
     ADMIN_PRIV_KEY=$(cat /proc/sys/kernel/random/uuid)
     SUPERADMIN_PUB_KEY=$(cat /proc/sys/kernel/random/uuid)
@@ -26,7 +26,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     IMS_PRIV_KEY=$(cat /proc/sys/kernel/random/uuid)
     SERVER_ID=$(cat /proc/sys/kernel/random/uuid)
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    ADMIN_PWD=$(uuidgen)
+    ADMIN_PWD=admin
     ADMIN_PUB_KEY=$(uuidgen)
     ADMIN_PRIV_KEY=$(uuidgen)
     SUPERADMIN_PUB_KEY=$(uuidgen)
