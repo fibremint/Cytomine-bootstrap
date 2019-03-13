@@ -183,7 +183,7 @@ if [[ $BIOFORMAT_ENABLED = true ]]
 then
     docker create --name bioformat \
     -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
-    -e BIOFORMAT_PORT=$BIOFORMAT_PORT \
+    -e BIOFORMAT_PORT=4321 \
     --restart=unless-stopped \
     $BIOFORMAT_NAMESPACE/bioformat:$BIOFORMAT_VERSION > /dev/null
 
