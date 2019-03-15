@@ -37,6 +37,12 @@ FAST_DATA_PATH=/data/images
 SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
 SERVER_SSHKEYS_PATH=/data/ssh
 
+# Ask workflows to compute metrics and upload results to BIAFLOWS
+BIAFLOWS_WORKFLOWS_METRICS=false
+
+# Upload to BIAFLOWS resulting annotations produced by workflow executions
+BIAFLOWS_WORKFLOWS_EXPORT=true
+
 ###############################################################################
 ###############################################################################
 ###############################################################################

@@ -61,3 +61,6 @@ grails.retrievalPassword = '$RETRIEVAL_PASSWORD'
 grails.messageBrokerServerURL='$RABBITMQ_ALIAS:5672'
 
 grails.serverID='$SERVER_ID'
+
+biaflows.workflows.metrics=$BIAFLOWS_WORKFLOWS_METRICS
+biaflows.workflows.export=$BIAFLOWS_WORKFLOWS_EXPORT
