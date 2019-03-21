@@ -9,13 +9,13 @@ cytomine.customUI.global = [
         search : ["ROLE_ADMIN"],
         project: ["ALL"],
         ontology: ["ROLE_ADMIN"],
-        storage : ["ROLE_USER","ROLE_ADMIN"],
-        activity : ["ALL"],
+        storage : ["ROLE_ADMIN"],
+        activity : ["ROLE_ADMIN"],
         feedback : ["ROLE_USER","ROLE_ADMIN"],
-        explore : ["ROLE_USER","ROLE_ADMIN"],
+        explore : ["ALL"],
         admin : ["ROLE_ADMIN"],
         help : ["ALL"],
-        software : ["ROLE_USER", "ROLE_ADMIN"]
+        software : ["ALL"]
 ]
 
 grails.serverURL='http://$CORE_URL'
