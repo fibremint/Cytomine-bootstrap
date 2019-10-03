@@ -14,86 +14,88 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+. configuration.sh
+
 echo "Stopping Cytomine... Data will be preserved in databases."
 
-docker stop memcached
-docker rm -v memcached
+docker stop ${INSTANCE_PREFIX}memcached
+docker rm -v ${INSTANCE_PREFIX}memcached
 
-if [[ "$(docker ps -q -f name=rabbitmq)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}rabbitmq)" ]]
 then
-    docker stop rabbitmq
-    docker rm -v rabbitmq
+    docker stop ${INSTANCE_PREFIX}rabbitmq
+    docker rm -v ${INSTANCE_PREFIX}rabbitmq
 fi
 
-docker stop mongodb
-docker rm -v mongodb
-docker stop postgresql
-docker rm -v postgresql
+docker stop ${INSTANCE_PREFIX}mongodb
+docker rm -v ${INSTANCE_PREFIX}mongodb
+docker stop ${INSTANCE_PREFIX}postgresql
+docker rm -v ${INSTANCE_PREFIX}postgresql
 
-if [[ "$(docker ps -q -f name=backup_mongo)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}backup_mongo)" ]]
 then
-    docker stop backup_mongo
-    docker rm -v backup_mongo
+    docker stop ${INSTANCE_PREFIX}backup_mongo
+    docker rm -v ${INSTANCE_PREFIX}backup_mongo
 fi
 
-if [[ "$(docker ps -q -f name=backup_postgis)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}backup_postgis)" ]]
 then
-    docker stop backup_postgis
-    docker rm -v backup_postgis
+    docker stop ${INSTANCE_PREFIX}backup_postgis
+    docker rm -v ${INSTANCE_PREFIX}backup_postgis
 fi
 
-if [[ "$(docker ps -q -f name=retrieval)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}retrieval)" ]]
 then
-    docker stop retrieval
-    docker rm -v retrieval
+    docker stop ${INSTANCE_PREFIX}retrieval
+    docker rm -v ${INSTANCE_PREFIX}retrieval
 fi
 
-if [[ "$(docker ps -q -f name=iipJP2)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}iipJP2)" ]]
 then
-    docker stop iipJP2
-    docker rm -v iipJP2
+    docker stop ${INSTANCE_PREFIX}iipJP2
+    docker rm -v ${INSTANCE_PREFIX}iipJP2
 fi
 
-docker stop iipCyto
-docker rm -v iipCyto
+docker stop ${INSTANCE_PREFIX}iipCyto
+docker rm -v ${INSTANCE_PREFIX}iipCyto
 
-if [[ "$(docker ps -q -f name=bioformat)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}bioformat)" ]]
 then
-    docker stop bioformat
-    docker rm -v bioformat
+    docker stop ${INSTANCE_PREFIX}bioformat
+    docker rm -v ${INSTANCE_PREFIX}bioformat
 fi
 
-if [[ "$(docker ps -q -f name=ims)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}ims)" ]]
 then
-    docker stop ims
-    docker rm -v ims
+    docker stop ${INSTANCE_PREFIX}ims
+    docker rm -v ${INSTANCE_PREFIX}ims
 fi
 
-if [[ "$(docker ps -q -f name=core)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}core)" ]]
 then
-    docker stop core
-    docker rm -v core
+    docker stop ${INSTANCE_PREFIX}core
+    docker rm -v ${INSTANCE_PREFIX}core
 fi
 
-if [[ "$(docker ps -q -f name=iris)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}iris)" ]]
 then
-    docker stop iris
-    docker rm -v iris
+    docker stop ${INSTANCE_PREFIX}iris
+    docker rm -v ${INSTANCE_PREFIX}iris
 fi
 
-docker stop nginx
-docker rm -v nginx
+docker stop ${INSTANCE_PREFIX}nginx
+docker rm -v ${INSTANCE_PREFIX}nginx
 
-if [[ "$(docker ps -q -f name=software_router)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}software_router)" ]]
 then
-    docker stop software_router
-    docker rm -v software_router
+    docker stop ${INSTANCE_PREFIX}software_router
+    docker rm -v ${INSTANCE_PREFIX}software_router
 fi
 
-if [[ "$(docker ps -q -f name=slurm)" ]]
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}slurm)" ]]
 then
-    docker stop slurm
-    docker rm -v slurm
+    docker stop ${INSTANCE_PREFIX}slurm
+    docker rm -v ${INSTANCE_PREFIX}slurm
 fi
 
 echo "Done."

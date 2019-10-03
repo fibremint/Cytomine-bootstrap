@@ -4,7 +4,7 @@ configs/core/cytomineconfig.groovy
 configs/iipCyto/iip-configuration.sh
 configs/iipCyto/nginx.conf.sample
 configs/iipJP2/nginx.conf.sample
-configs/ims/imageserverconfig.properties
+configs/ims/ims-config.groovy
 configs/iris/iris-config.groovy
 configs/iris/iris-production-config.groovy
 configs/nginx/nginx.conf

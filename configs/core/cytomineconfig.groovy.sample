@@ -18,10 +18,11 @@ cytomine.customUI.global = [
         software : ["ALL"]
 ]
 
-grails.serverURL='http://$CORE_URL'
-grails.imageServerURL=['http://$IMS_URL1']
+grails.UIURL='$HTTP_PROTOCOL://$UI_URL'
+grails.serverURL='$HTTP_PROTOCOL://$CORE_URL'
+grails.imageServerURL=['$HTTP_PROTOCOL://$IMS_URL']
 grails.retrievalServerURL =['http://$RETRIEVAL_URL']
-grails.uploadURL='http://$UPLOAD_URL'
+grails.uploadURL='$HTTP_PROTOCOL://$UPLOAD_URL'
 
 storage_buffer='$IMS_BUFFER_PATH'
 storage_path='$IMS_STORAGE_PATH'
@@ -61,6 +62,13 @@ grails.retrievalPassword = '$RETRIEVAL_PASSWORD'
 grails.messageBrokerServerURL='$RABBITMQ_ALIAS:5672'
 
 grails.serverID='$SERVER_ID'
+
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = "${grails.UIURL}/"
+grails.plugin.springsecurity.successHandler.ajaxSuccessUrl = "${grails.UIURL}/login/ajaxSuccess"
+grails.plugin.springsecurity.failureHandler.defaultFailureUrl = "${grails.UIURL}/login/authfail?login_error=1"
+grails.plugin.springsecurity.failureHandler.ajaxAuthFailUrl = "${grails.UIURL}/login/authfail?ajax=true"
+grails.plugin.springsecurity.logout.afterLogoutUrl = "${grails.UIURL}/"
+grails.plugin.springsecurity.logout. alwaysUseDefaultTargetUrl = true
 
 biaflows.workflows.metrics=$BIAFLOWS_WORKFLOWS_METRICS
 biaflows.workflows.export=$BIAFLOWS_WORKFLOWS_EXPORT

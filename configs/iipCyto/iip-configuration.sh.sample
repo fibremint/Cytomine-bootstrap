@@ -1,4 +1,23 @@
-export MAX_CVT=10000
+# VERBOSITY The level of logging. 0 no logging, 1 minimal logging, 2 lots of debugging stuff, ..., 6 a very large amount
+export VERBOSITY=1
+
+# MAX_IMAGE_CACHE_SIZE Max image cache size to be held in RAM in MB. This is a cache of the compressed JPEG image tiles requested by the client. The default is 10MB.
+export MAX_IMAGE_CACHE_SIZE=100
+
+# MEMCACHED_SERVERS A comma-delimitted list of memcached servers with optional port numbers.
 export MEMCACHED_SERVERS=memcached:11211
+
+ # MEMCACHED_TIMEOUT Time in seconds that cache remains fresh. Default is 86400 seconds (24 hours).
 export MEMCACHED_TIMEOUT=604800
+
+# MAX_CVT Limits the maximum image dimensions in pixels (the WID or HEI commands) allowable for dynamic JPEG export via the CVT command. This prevents huge requests from overloading the server. The default is 5000.
+export MAX_CVT=10000
+
+# JPEG_QUALITY The default JPEG quality factor for compression when the client does not specify one. The value should be between 1 (highest level of compression) and 100 (highest image quality). The default is 75.
 export JPEG_QUALITY=90
+
+# INTERPOLATION Interpolation method to use for rescaling when using image export. Integer value. 0 for fastest nearest neighbour interpolation. 1 for bilinear interpolation (better quality but about 2.5x slower). Bilinear by default.
+export INTERPOLATION=1
+
+# NB_IIP_PROCESS Number of spawned processed for iipsrv
+export NB_IIP_PROCESS=$NB_IIP_PROCESS

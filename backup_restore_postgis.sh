@@ -33,8 +33,8 @@ docker exec -e PGPASSWORD="docker" postgresql dropdb -h localhost -U docker dock
 
 #Then recreate the db (the commands are on your deployment files).
 docker exec -e PGPASSWORD="docker" postgresql createdb -h localhost -U docker  --encoding='utf-8' --template=template0 -O docker docker
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='docker'"
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION postgis;"
+docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION IF NOT EXISTS ltree;"
 docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON geometry_columns TO PUBLIC;"
 docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON geography_columns TO PUBLIC;"
 docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"

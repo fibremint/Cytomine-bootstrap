@@ -26,6 +26,7 @@
 #------------------------------------------------------------------------------
 
 # These URLs have to be accessible (add them to /etc/hosts if you run it locally)
+UI_URL=localhost-core
 CORE_URL=localhost-core
 IMS_URL1=localhost-ims
 UPLOAD_URL=localhost-upload
@@ -36,6 +37,7 @@ IMS_BUFFER_PATH=/data/_buffer
 FAST_DATA_PATH=/data/images
 SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
 SERVER_SSHKEYS_PATH=/data/ssh
+PROXY_CACHE_PATH=/data/cache
 
 # Ask workflows to compute metrics and upload results to BIAFLOWS
 BIAFLOWS_WORKFLOWS_METRICS=false
@@ -62,6 +64,8 @@ SENDER_EMAIL='your.email@gmail.com'
 
 # Advanced configuration.
 CORE_DEVELOPMENT=false
+POSTGRESQL_VOLUME=db_postgres11
+MONGODB_VOLUME=db_mongo
 
 #------------------------------------------------------------------------------
 # IMS
@@ -84,7 +88,7 @@ BACKUP_PATH=/data/backup
 #------------------------------------------------------------------------------
 # PLUGIN: RETRIEVAL
 #------------------------------------------------------------------------------
-RETRIEVAL_ENABLED=false
+RETRIEVAL_ENABLED=true
 RETRIEVAL_URL=localhost-retrieval
 RETRIEVAL_PATH=/data/thumb
 
@@ -116,6 +120,7 @@ IRIS_ADMIN_EMAIL="ian.admin@somewhere.edu"
 
 # Advanced configuration.
 IRIS_ID="LOCAL_CYTOMINE_IRIS"
+IRIS_VOLUME=iris_data
 
 #------------------------------------------------------------------------------
 # PLUGIN: SOFTWARE
@@ -127,3 +132,29 @@ JOBS_PATH=/data/jobs
 # Advanced configuration.
 RABBITMQ_LOGIN="router"
 RABBITMQ_PASSWORD="router"
+SLURM_VOLUME=slurm_data
+
+#-------------------------------------------------------------------------------
+# HTTPS FOR PUBLIC URLS
+#-------------------------------------------------------------------------------
+
+# Protocol for URLs accessible from outside (CORE_URL, IMS_URL, UPLOAD_URL, IRIS_URL)
+HTTP_PROTOCOL=https # Accepted values: http, https
+HTTP_PROXY=false
+
+# Path where certificates are stored:
+CERTIFICATE_PATH=/data/certificates
+
+# To use HTTPS protocol, you need the following certificates in your CERTIFICATE_PATH
+# - ${CORE_URL}.pem (ex: localhost-core.pem)
+# - ${CORE_URL}-key.pem (ex: localhost-core-key.pem)
+# - ${IMS_URL}.pem
+# - ${IMS_URL}-key.pem
+# - ${UPLOAD_URL}.pem
+# - ${UPLOAD_URL}-key.pem
+# - ${IRIS_URL}.pem - only if $IRIS_ENABLED = true
+# - ${IRIS_URL}-key.pem - only if $IRIS_ENABLED = true
+
+INSTANCE_PREFIX=""
+HTTP_NGINX_PORT=80
+HTTPS_NGINX_PORT=443
