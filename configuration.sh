@@ -28,7 +28,7 @@
 # These URLs have to be accessible (add them to /etc/hosts if you run it locally)
 UI_URL=localhost-core
 CORE_URL=localhost-core
-IMS_URL1=localhost-ims
+IMS_URL=localhost-ims
 UPLOAD_URL=localhost-upload
 
 # These paths must exist
