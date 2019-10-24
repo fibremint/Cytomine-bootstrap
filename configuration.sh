@@ -26,18 +26,18 @@
 #------------------------------------------------------------------------------
 
 # These URLs have to be accessible (add them to /etc/hosts if you run it locally)
-UI_URL=localhost-core
-CORE_URL=localhost-core
-IMS_URL=localhost-ims
-UPLOAD_URL=localhost-upload
+UI_URL=biaflows
+CORE_URL=biaflows
+IMS_URL=biaflows-ims
+UPLOAD_URL=biaflows-upload
 
 # These paths must exist
-IMS_STORAGE_PATH=/data/images
-IMS_BUFFER_PATH=/data/_buffer
-FAST_DATA_PATH=/data/images
-SOFTWARE_DOCKER_IMAGES_PATH=/data/softwares/images
-SERVER_SSHKEYS_PATH=/data/ssh
-PROXY_CACHE_PATH=/data/cache
+IMS_STORAGE_PATH=/biaflows/data/images
+IMS_BUFFER_PATH=/biaflows/data/_buffer
+FAST_DATA_PATH=/biaflows/data/images
+SOFTWARE_DOCKER_IMAGES_PATH=/biaflows/data/softwares/images
+SERVER_SSHKEYS_PATH=/biaflows/data/ssh
+PROXY_CACHE_PATH=/biaflows/data/cache
 
 # Ask workflows to compute metrics and upload results to BIAFLOWS
 BIAFLOWS_WORKFLOWS_METRICS=false
@@ -64,8 +64,8 @@ SENDER_EMAIL='your.email@gmail.com'
 
 # Advanced configuration.
 CORE_DEVELOPMENT=false
-POSTGRESQL_VOLUME=db_postgres11
-MONGODB_VOLUME=db_mongo
+POSTGRESQL_VOLUME=db_biaflows_sql
+MONGODB_VOLUME=db_biaflows_nosql
 
 #------------------------------------------------------------------------------
 # IMS
@@ -126,8 +126,8 @@ IRIS_VOLUME=iris_data
 # PLUGIN: SOFTWARE
 #------------------------------------------------------------------------------
 SOFTWARE_ENABLED=true
-SOFTWARE_CODE_PATH=/data/softwares/code
-JOBS_PATH=/data/jobs
+SOFTWARE_CODE_PATH=/biaflows/data/softwares/code
+JOBS_PATH=/biaflows/data/jobs
 
 # Advanced configuration.
 RABBITMQ_LOGIN="router"
@@ -139,11 +139,11 @@ SLURM_VOLUME=slurm_data
 #-------------------------------------------------------------------------------
 
 # Protocol for URLs accessible from outside (CORE_URL, IMS_URL, UPLOAD_URL, IRIS_URL)
-HTTP_PROTOCOL=https # Accepted values: http, https
+HTTP_PROTOCOL=http # Accepted values: http, https
 HTTP_PROXY=false
 
 # Path where certificates are stored:
-CERTIFICATE_PATH=/data/certificates
+CERTIFICATE_PATH=/biaflows/data/certificates
 
 # To use HTTPS protocol, you need the following certificates in your CERTIFICATE_PATH
 # - ${CORE_URL}.pem (ex: localhost-core.pem)

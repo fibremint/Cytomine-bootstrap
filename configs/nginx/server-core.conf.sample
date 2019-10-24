@@ -10,33 +10,6 @@ server {
     ssl_certificate /certificates/$CORE_URL.pem;
     ssl_certificate_key /certificates/$CORE_URL-key.pem;
 
-    if ($http_origin ~* "localhost") {
-        set $cors_origin $http_origin;
-        set $cors_cred   true;
-        set $cors_method 'GET, PUT, POST, DELETE, OPTIONS';
-        set $cors_header 'Content-Type, Content-Range, Content-Length, Content-Disposition, Content-Description, Date, dateFull, authorization, content-type-full, X-Requested-With, Pragma';
-
-        location / {
-            proxy_pass http://backend-core;
-
-            add_header Access-Control-Allow-Origin      $cors_origin always;
-            add_header Access-Control-Allow-Credentials $cors_cred always;
-            add_header Access-Control-Allow-Headers     $cors_header always;
-            add_header Access-Control-Allow-Methods     $cors_method always;
-
-            if ($request_method = 'OPTIONS') {
-                add_header Access-Control-Allow-Origin		$cors_origin always;
-                add_header Access-Control-Allow-Credentials 	$cors_cred always;
-                add_header Access-Control-Allow-Headers		$cors_header always;
-                add_header Access-Control-Allow-Methods 	$cors_method always;
-                add_header 'Access-Control-Max-Age' 		1728000;
-                add_header 'Content-Type' 			'text/plain charset=UTF-8';
-                add_header 'Content-Length' 			0;
-                return 204;
-            }
-        }
-    }
-    else {
         root /web-ui;
         index index.html;
 
@@ -84,6 +57,11 @@ server {
                proxy_set_header X-Real-IP $remote_addr;
                proxy_set_header Host $host;
                proxy_pass http://backend-core;
+        }
+        location /j_spring_security_switch_user {
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header Host $host;
+                proxy_pass http://backend-core;
         }
     }
 }
