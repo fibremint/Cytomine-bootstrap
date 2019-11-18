@@ -10,58 +10,32 @@ server {
     ssl_certificate /certificates/$CORE_URL.pem;
     ssl_certificate_key /certificates/$CORE_URL-key.pem;
 
-        root /web-ui;
-        index index.html;
+    root /web-ui;
+    index index.html;
 
-        location /j_spring_security_check {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /j_spring_security_logout {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /loginWithoutLDAP {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /login {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /logout {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /api {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /server {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
-        location /session {
-               proxy_set_header X-Real-IP $remote_addr;
-               proxy_set_header Host $host;
-               proxy_pass http://backend-core;
-        }
-        location /custom-ui {
-               proxy_set_header X-Real-IP $remote_addr;
-               proxy_set_header Host $host;
-               proxy_pass http://backend-core;
-        }
-        location /j_spring_security_switch_user {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header Host $host;
-                proxy_pass http://backend-core;
-        }
+    location /api {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_pass http://backend-core;
+    }
+    location /j_spring_security { # _check, _logout, _switch_user, _exit_user
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_pass http://backend-core;
+    }
+    location ~ /(login|logout) {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_pass http://backend-core;
+    }
+    location ~ /(server|session|custom-ui|static) {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_pass http://backend-core;
+    }
+    location ~ /(restApiDoc|js/jsondoc|css/jsondoc) {
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header Host $host;
+           proxy_pass http://backend-core;
     }
 }

@@ -261,6 +261,7 @@ $NGINX_NAMESPACE/nginx:$NGINX_VERSION > /dev/null
 docker cp $PWD/configs/nginx/nginx.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/nginx.conf
 docker cp $PWD/configs/nginx/server-core.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-core.conf
 docker cp $PWD/configs/nginx/server-ims.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-ims.conf
+docker cp $PWD/configs/web-ui/configuration.json ${INSTANCE_PREFIX}nginx:/web-ui/configuration.json
 
 if [[ $IRIS_ENABLED = true ]]; then docker cp $PWD/configs/nginx/server-iris.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iris.conf; fi
 if [[ $RETRIEVAL_ENABLED = true ]]; then docker cp $PWD/configs/nginx/server-retrieval.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-retrieval.conf; fi

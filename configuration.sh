@@ -37,7 +37,6 @@ IMS_BUFFER_PATH=/biaflows/data/_buffer
 FAST_DATA_PATH=/biaflows/data/images
 SOFTWARE_DOCKER_IMAGES_PATH=/biaflows/data/softwares/images
 SERVER_SSHKEYS_PATH=/biaflows/data/ssh
-PROXY_CACHE_PATH=/biaflows/data/cache
 
 # Ask workflows to compute metrics and upload results to BIAFLOWS
 BIAFLOWS_WORKFLOWS_METRICS=false
