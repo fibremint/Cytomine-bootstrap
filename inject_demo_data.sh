@@ -29,8 +29,8 @@
 . ./configuration-versions.sh
 
 docker create --rm --name project_migrator \
--e CORE_URL=$CORE_URL \
--e UPLOAD_URL=$UPLOAD_URL \
+-e CORE_URL=$HTTP_PROTOCOL://$CORE_URL \
+-e UPLOAD_URL=$HTTP_PROTOCOL://$UPLOAD_URL \
 -e PUBLIC_KEY=${1:-$ADMIN_PUB_KEY} \
 -e PRIVATE_KEY=${2:-$ADMIN_PRIV_KEY} \
 $PROJECT_MIGRATOR_NAMESPACE/project_migrator:$PROJECT_MIGRATOR_VERSION import /tmp/projects.txt
