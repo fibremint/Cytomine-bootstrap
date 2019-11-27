@@ -27,6 +27,7 @@ grails.uploadURL='$HTTP_PROTOCOL://$UPLOAD_URL'
 storage_buffer='$IMS_BUFFER_PATH'
 storage_path='$IMS_STORAGE_PATH'
 fast_data_path='$FAST_DATA_PATH'
+cytomine.software.path.softwareImages='$SOFTWARE_DOCKER_IMAGES_PATH'
 
 grails.iris.enabled=$IRIS_ENABLED
 grails.retrieval.enabled=$RETRIEVAL_ENABLED
