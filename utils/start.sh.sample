@@ -61,7 +61,7 @@ then
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
         apt-get install -y ssh-keygen
     fi
-    ssh-keygen -t rsa -N "" -C $CORE_URL -f $SERVER_SSHKEYS_FILE
+    ssh-keygen -t rsa -m PEM -N "" -C $CORE_URL -f $SERVER_SSHKEYS_FILE
 fi
 
 
