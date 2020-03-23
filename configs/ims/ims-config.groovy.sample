@@ -10,7 +10,7 @@ cytomine.ims.path.buffer = "$IMS_BUFFER_PATH"
 cytomine.ims.path.storage = "$IMS_STORAGE_PATH"
 
 cytomine.ims.conversion.vips.compression = "lzw"
-cytomine.ims.conversion.vips.executable = "/usr/local/bin/vips"
+cytomine.ims.conversion.vips.executable = "vips"
 cytomine.ims.conversion.unzip.executable = "unzip"
 cytomine.ims.conversion.gdal.executable = "gdal_translate"
 cytomine.ims.conversion.ffmpeg.executable = "ffmpeg"
@@ -19,7 +19,7 @@ cytomine.ims.conversion.bioformats.hostname = "$BIOFORMAT_ALIAS"
 cytomine.ims.conversion.bioformats.port = 4321
 
 cytomine.ims.detection.tiffinfo.executable = "tiffinfo"
-cytomine.ims.detection.identify.executable = "/usr/local/bin/identify"
+cytomine.ims.detection.identify.executable = "identify"
 cytomine.ims.detection.gdal.executable = "gdalinfo"
 cytomine.ims.detection.ffprobe.executable = "ffprobe"
 cytomine.ims.metadata.exiftool.executable = "exiftool"
@@ -34,6 +34,11 @@ cytomine.ims.deleteJob.frequency = 600 // in seconds
 
 cytomine.ims.hdf5.maxBurstSize = 512 // Mbytes
 cytomine.ims.hdf5.maxBlockSize = 15 // Mbytes
+
+cytomine.ims.tile.size = 256
+cytomine.ims.hdf5.queueLimit = 100
+
+cytomine.ims.upload.nThreadsPool = 10
 
 // Rest API Doc plugin
 grails.plugins.restapidoc.docVersion = "0.1"

@@ -66,6 +66,7 @@ CORE_DEVELOPMENT=false
 POSTGRESQL_VOLUME=db_biaflows_sql
 MONGODB_VOLUME=db_biaflows_nosql
 
+WEB_UI_DEVELOPMENT=false
 #------------------------------------------------------------------------------
 # IMS
 #------------------------------------------------------------------------------
@@ -87,7 +88,7 @@ BACKUP_PATH=/data/backup
 #------------------------------------------------------------------------------
 # PLUGIN: RETRIEVAL
 #------------------------------------------------------------------------------
-RETRIEVAL_ENABLED=true
+RETRIEVAL_ENABLED=false
 RETRIEVAL_URL=localhost-retrieval
 RETRIEVAL_PATH=/data/thumb
 
@@ -99,6 +100,7 @@ RETRIEVAL_ENGINE=redis #possible values : memory, redis
 # PLUGIN: BIOFORMAT
 #------------------------------------------------------------------------------
 BIOFORMAT_ENABLED=true
+BIOFORMAT_DEVELOPMENT=false
 
 #------------------------------------------------------------------------------
 # PLUGIN: IIP-JP2 (JPEG 2000 native support)

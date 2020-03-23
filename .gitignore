@@ -16,6 +16,7 @@ configs/nginx/server-ims.conf
 configs/nginx/server-iris.conf
 configs/nginx/server-retrieval.conf
 configs/software_router/config.groovy
+configs/web-ui/configuration.json
 hosts/core/addHosts.sh
 hosts/ims/addHosts.sh
 hosts/iris/addHosts.sh

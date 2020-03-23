@@ -77,6 +77,12 @@ then
     docker rm -v ${INSTANCE_PREFIX}core
 fi
 
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}webUI)" ]]
+then
+    docker stop ${INSTANCE_PREFIX}webUI
+    docker rm -v ${INSTANCE_PREFIX}webUI
+fi
+
 if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}iris)" ]]
 then
     docker stop ${INSTANCE_PREFIX}iris

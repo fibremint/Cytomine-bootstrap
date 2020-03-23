@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+. ./configuration.sh
+
 DIR=reporting-$(date +%Y-%m-%d_%H-%M-%S)
 mkdir -p $DIR
 
@@ -22,22 +24,22 @@ cp -r ./configs $DIR/configs
 cp -r ./hosts $DIR/hosts
 cp ./configuration-versions.sh $DIR/configuration-versions.sh
 
-docker logs nginx &> $DIR/log-nginx.out
-docker logs memcached &> $DIR/log-memcached.out
-docker logs mongodb &> $DIR/log-mongodb.out
-docker logs postgresql &> $DIR/log-postgresql.out
-docker logs iipCyto &> $DIR/log-iipCyto.out
-if [[ "$(docker ps -q -f name=rabbitmq)" ]]; then docker logs rabbitmq &> $DIR/log-rabbitmq.out; fi
-if [[ "$(docker ps -q -f name=backup_mongo)" ]]; then docker logs backup_mongo &> $DIR/log-backup_mongo.out; fi
-if [[ "$(docker ps -q -f name=backup_postgis)" ]]; then docker logs backup_postgis &> $DIR/log-backup_postgis.out; fi
-if [[ "$(docker ps -q -f name=retrieval)" ]]; then docker logs retrieval &> $DIR/log-retrieval.out; fi
-if [[ "$(docker ps -q -f name=iipJP2)" ]]; then docker logs iipJP2 &> $DIR/log-iipJP2.out; fi
-if [[ "$(docker ps -q -f name=bioformat)" ]]; then docker logs bioformat &> $DIR/log-bioformat.out; fi
-if [[ "$(docker ps -q -f name=ims)" ]]; then docker logs ims &> $DIR/log-ims.out; fi
-if [[ "$(docker ps -q -f name=core)" ]]; then docker logs core &> $DIR/log-core.out; fi
-if [[ "$(docker ps -q -f name=iris)" ]]; then docker logs iris &> $DIR/log-iris.out; fi
-if [[ "$(docker ps -q -f name=software_router)" ]]; then docker logs software_router &> $DIR/log-software_router.out; fi
-if [[ "$(docker ps -q -f name=slurm)" ]]; then docker logs slurm &> $DIR/log-slurm.out; fi
-
+docker logs ${INSTANCE_PREFIX}nginx &> $DIR/log-nginx.out
+docker logs ${INSTANCE_PREFIX}memcached &> $DIR/log-memcached.out
+docker logs ${INSTANCE_PREFIX}mongodb &> $DIR/log-mongodb.out
+docker logs ${INSTANCE_PREFIX}postgresql &> $DIR/log-postgresql.out
+docker logs ${INSTANCE_PREFIX}iipCyto &> $DIR/log-iipCyto.out
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}rabbitmq)" ]]; then docker logs ${INSTANCE_PREFIX}rabbitmq &> $DIR/log-rabbitmq.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}backup_mongo)" ]]; then docker logs ${INSTANCE_PREFIX}backup_mongo &> $DIR/log-backup_mongo.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}backup_postgis)" ]]; then docker logs ${INSTANCE_PREFIX}backup_postgis &> $DIR/log-backup_postgis.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}retrieval)" ]]; then docker logs ${INSTANCE_PREFIX}retrieval &> $DIR/log-retrieval.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}iipJP2)" ]]; then docker logs ${INSTANCE_PREFIX}iipJP2 &> $DIR/log-iipJP2.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}bioformat)" ]]; then docker logs ${INSTANCE_PREFIX}bioformat &> $DIR/log-bioformat.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}ims)" ]]; then docker logs ${INSTANCE_PREFIX}ims &> $DIR/log-ims.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}core)" ]]; then docker logs ${INSTANCE_PREFIX}core &> $DIR/log-core.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}iris)" ]]; then docker logs ${INSTANCE_PREFIX}iris &> $DIR/log-iris.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}software_router)" ]]; then docker logs ${INSTANCE_PREFIX}software_router &> $DIR/log-software_router.out; fi
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}slurm)" ]]; then docker logs ${INSTANCE_PREFIX}slurm &> $DIR/log-slurm.out; fi
+${INSTANCE_PREFIX}
 tar -zcvf $DIR.tar.gz $DIR
 rm -r $DIR

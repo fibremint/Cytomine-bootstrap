@@ -16,6 +16,7 @@
 # limitations under the License.
 #made scripts in a util folder
 
+. ./configuration.sh
 
 if [ -z "$1" ]
 then
@@ -25,22 +26,22 @@ else
 	NAME=$1
 fi
 
-docker cp $NAME postgresql:/BU.sql
+docker cp $NAME ${INSTANCE_PREFIX}postgresql:/BU.sql
 
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -c "UPDATE pg_database SET datistemplate = 'false' WHERE datname ='docker'"
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -c "select pg_terminate_backend(pid) from pg_stat_activity where datname='docker' AND pid <> pg_backend_pid()"
-docker exec -e PGPASSWORD="docker" postgresql dropdb -h localhost -U docker docker
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -c "UPDATE pg_database SET datistemplate = 'false' WHERE datname ='docker'"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -c "select pg_terminate_backend(pid) from pg_stat_activity where datname='docker' AND pid <> pg_backend_pid()"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql dropdb -h localhost -U docker docker
 
 #Then recreate the db (the commands are on your deployment files).
-docker exec -e PGPASSWORD="docker" postgresql createdb -h localhost -U docker  --encoding='utf-8' --template=template0 -O docker docker
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION IF NOT EXISTS postgis;"
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION IF NOT EXISTS ltree;"
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON geometry_columns TO PUBLIC;"
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON geography_columns TO PUBLIC;"
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql createdb -h localhost -U docker  --encoding='utf-8' --template=template0 -O docker docker
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -d docker -c "CREATE EXTENSION IF NOT EXISTS ltree;"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON geometry_columns TO PUBLIC;"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON geography_columns TO PUBLIC;"
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -d docker -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
 
 
-docker exec -e PGPASSWORD="docker" postgresql psql -h localhost -U docker -w -d docker -f /BU.sql
+docker exec -e PGPASSWORD="docker" ${INSTANCE_PREFIX}postgresql psql -h localhost -U docker -w -d docker -f /BU.sql
 
 echo "Terminated"
 

@@ -32,11 +32,14 @@ echo "BIOFORMAT=$BIOFORMAT_ENABLED"
 echo "SOFTWARE=$SOFTWARE_ENABLED"
 echo "CORE_DEVELOPMENT=$CORE_DEVELOPMENT"
 echo "IMS_DEVELOPMENT=$IMS_DEVELOPMENT"
+echo "WEB_UI_DEVELOPMENT=$WEB_UI_DEVELOPMENT"
+echo "BIOFORMAT_DEVELOPMENT=$BIOFORMAT_DEVELOPMENT"
 echo ""
 echo "* Container versions *"
 echo "$NGINX_NAMESPACE/nginx:$NGINX_VERSION"
-if [[ $CORE_DEVELOPMENT = false ]]; then echo echo "$CORE_NAMESPACE/core:$CORE_VERSION"; fi
-echo "$POSTGIS_NAMESPACE/postgis:$POSTGIS_VERSION"
+if [[ $CORE_DEVELOPMENT = false ]]; then echo "$CORE_NAMESPACE/core:$CORE_VERSION"; fi
+if [[ $WEB_UI_DEVELOPMENT = false ]]; then echo "$WEB_UI_NAMESPACE/web-ui:$WEB_UI_VERSION"; fi
+echo "$POSTGRES_NAMESPACE/postgres:$POSTGRES_VERSION"
 echo "$MONGODB_NAMESPACE/mongodb:$MONGODB_VERSION"
 if [[ $BACKUP_ENABLED = true ]]; then echo "$BACKUP_NAMESPACE/backup:$BACKUP_VERSION"; fi
 if [[ $IMS_DEVELOPMENT = false ]]; then echo "$IMS_NAMESPACE/ims:$IMS_VERSION"; fi
@@ -67,7 +70,7 @@ docker create --name ${INSTANCE_PREFIX}memcached \
 --restart=unless-stopped \
 $MEMCACHED_NAMESPACE/memcached:$MEMCACHED_VERSION > /dev/null
 
-docker cp $PWD/configs/memcached/memcached.conf ${INSTANCE_PREFIX}memcached:/etc/memcached.conf
+docker cp "${PWD}/configs/memcached/memcached.conf" ${INSTANCE_PREFIX}memcached:/etc/memcached.conf
 docker start ${INSTANCE_PREFIX}memcached
 
 
@@ -93,7 +96,7 @@ docker create --name ${INSTANCE_PREFIX}postgresql \
 --restart=unless-stopped \
 $POSTGRES_NAMESPACE/postgres:$POSTGRES_VERSION postgres -c 'config_file=/tmp/postgresql.conf' > /dev/null
 
-docker cp $PWD/configs/postgresql/postgresql.conf ${INSTANCE_PREFIX}postgresql:/tmp/postgresql.conf
+docker cp "${PWD}/configs/postgresql/postgresql.conf" ${INSTANCE_PREFIX}postgresql:/tmp/postgresql.conf
 docker start ${INSTANCE_PREFIX}postgresql
 
 
@@ -148,7 +151,7 @@ then
     --restart=unless-stopped \
     $RETRIEVAL_NAMESPACE/retrieval:$RETRIEVAL_VERSION > /dev/null
 
-    docker cp $PWD/hosts/retrieval/addHosts.sh ${INSTANCE_PREFIX}retrieval:/tmp/addHosts.sh
+    docker cp "${PWD}/hosts/retrieval/addHosts.sh" ${INSTANCE_PREFIX}retrieval:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}retrieval
 fi
 
@@ -163,7 +166,7 @@ then
     --restart=unless-stopped \
     $IIPJP2_NAMESPACE/iip-jp2000:$IIPJP2_VERSION > /dev/null
 
-    docker cp $PWD/configs/iipJP2/nginx.conf.sample ${INSTANCE_PREFIX}iipJP2:/tmp/nginx.conf.sample
+    docker cp "${PWD}/configs/iipJP2/nginx.conf.sample" ${INSTANCE_PREFIX}iipJP2:/tmp/nginx.conf.sample
     docker start ${INSTANCE_PREFIX}iipJP2
 fi
 
@@ -176,13 +179,13 @@ docker create --name ${INSTANCE_PREFIX}iipCyto \
 --restart=unless-stopped \
 $IIPCYTO_NAMESPACE/iip-cyto:$IIPCYTO_VERSION > /dev/null
 
-docker cp $PWD/configs/iipCyto/nginx.conf.sample ${INSTANCE_PREFIX}iipCyto:/tmp/nginx.conf.sample
-docker cp $PWD/configs/iipCyto/iip-configuration.sh ${INSTANCE_PREFIX}iipCyto:/tmp/iip-configuration.sh
+docker cp "${PWD}/configs/iipCyto/nginx.conf.sample" ${INSTANCE_PREFIX}iipCyto:/tmp/nginx.conf.sample
+docker cp "${PWD}/configs/iipCyto/iip-configuration.sh" ${INSTANCE_PREFIX}iipCyto:/tmp/iip-configuration.sh
 docker start ${INSTANCE_PREFIX}iipCyto
 
 
 # ----- BIOFORMAT -----
-if [[ $BIOFORMAT_ENABLED = true ]]
+if [[ $BIOFORMAT_ENABLED = true && $BIOFORMAT_DEVELOPMENT = false ]]
 then
     docker create --name ${INSTANCE_PREFIX}bioformat \
     -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
@@ -207,8 +210,8 @@ then
     --restart=unless-stopped \
     $IMS_NAMESPACE/ims:$IMS_VERSION > /dev/null
 
-    docker cp $PWD/configs/ims/ims-config.groovy ${INSTANCE_PREFIX}ims:/usr/share/tomcat7/.grails/ims-config.groovy
-    docker cp $PWD/hosts/ims/addHosts.sh ${INSTANCE_PREFIX}ims:/tmp/addHosts.sh
+    docker cp "${PWD}/configs/ims/ims-config.groovy" ${INSTANCE_PREFIX}ims:/usr/share/tomcat7/.grails/ims-config.groovy
+    docker cp "${PWD}/hosts/ims/addHosts.sh" ${INSTANCE_PREFIX}ims:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}ims
 fi
 
@@ -223,9 +226,22 @@ then
     --restart=unless-stopped \
     $CORE_NAMESPACE/core:$CORE_VERSION > /dev/null
 
-    docker cp $PWD/configs/core/cytomineconfig.groovy ${INSTANCE_PREFIX}core:/usr/share/tomcat7/.grails/cytomineconfig.groovy
-    docker cp $PWD/hosts/core/addHosts.sh ${INSTANCE_PREFIX}core:/tmp/addHosts.sh
+    docker cp "${PWD}/configs/core/cytomineconfig.groovy" ${INSTANCE_PREFIX}core:/usr/share/tomcat7/.grails/cytomineconfig.groovy
+    docker cp "${PWD}/hosts/core/addHosts.sh" ${INSTANCE_PREFIX}core:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}core
+fi
+
+# ----- WEB-UI -----
+if [[ $WEB_UI_DEVELOPMENT = false ]]
+then
+    docker create --name ${INSTANCE_PREFIX}webUI \
+    -v /etc/localtime:/etc/localtime \
+    --restart=unless-stopped \
+    $WEB_UI_NAMESPACE/web-ui:$WEB_UI_VERSION > /dev/null
+
+    docker cp "${PWD}/configs/web-ui/configuration.json" ${INSTANCE_PREFIX}webUI:/app/configuration.json
+    docker cp "${PWD}/configs/web-ui/nginx.conf" ${INSTANCE_PREFIX}webUI:/etc/nginx/nginx.conf
+    docker start ${INSTANCE_PREFIX}webUI
 fi
 
 # ----- IRIS -----
@@ -237,9 +253,9 @@ then
     --restart=unless-stopped \
     $IRIS_NAMESPACE/iris:$IRIS_VERSION > /dev/null
 
-    docker cp $PWD/configs/iris/iris-config.groovy ${INSTANCE_PREFIX}iris:/usr/share/tomcat7/.grails/iris-config.groovy
-    docker cp $PWD/configs/iris/iris-production-config.groovy ${INSTANCE_PREFIX}iris:/usr/share/tomcat7/.grails/iris-production-config.groovy
-    docker cp $PWD/hosts/iris/addHosts.sh ${INSTANCE_PREFIX}iris:/tmp/addHosts.sh
+    docker cp "${PWD}/configs/iris/iris-config.groovy" ${INSTANCE_PREFIX}iris:/usr/share/tomcat7/.grails/iris-config.groovy
+    docker cp "${PWD}/configs/iris/iris-production-config.groovy" ${INSTANCE_PREFIX}iris:/usr/share/tomcat7/.grails/iris-production-config.groovy
+    docker cp "${PWD}/hosts/iris/addHosts.sh" ${INSTANCE_PREFIX}iris:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}iris
 fi
 
@@ -251,6 +267,7 @@ docker create --name ${INSTANCE_PREFIX}nginx \
 --link ${INSTANCE_PREFIX}iipCyto:iipCyto \
 --link ${INSTANCE_PREFIX}core:core \
 --link ${INSTANCE_PREFIX}iipJP2:iipJP2 \
+--link ${INSTANCE_PREFIX}webUI:webUI \
 -v $IMS_BUFFER_PATH:/tmp/uploaded \
 -v $CERTIFICATE_PATH:/certificates \
 -p $HTTP_NGINX_PORT:80 \
@@ -258,15 +275,14 @@ docker create --name ${INSTANCE_PREFIX}nginx \
 --restart=unless-stopped \
 $NGINX_NAMESPACE/nginx:$NGINX_VERSION > /dev/null
 
-docker cp $PWD/configs/nginx/nginx.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/nginx.conf
-docker cp $PWD/configs/nginx/server-core.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-core.conf
-docker cp $PWD/configs/nginx/server-ims.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-ims.conf
-docker cp $PWD/configs/web-ui/configuration.json ${INSTANCE_PREFIX}nginx:/web-ui/configuration.json
+docker cp "${PWD}/configs/nginx/nginx.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/nginx.conf
+docker cp "${PWD}/configs/nginx/server-core.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-core.conf
+docker cp "${PWD}/configs/nginx/server-ims.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-ims.conf
 
-if [[ $IRIS_ENABLED = true ]]; then docker cp $PWD/configs/nginx/server-iris.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iris.conf; fi
-if [[ $RETRIEVAL_ENABLED = true ]]; then docker cp $PWD/configs/nginx/server-retrieval.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-retrieval.conf; fi
-if [[ $IIP_JP2_ENABLED = true ]]; then docker cp $PWD/configs/nginx/server-iipjp2.conf ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iipjp2.conf; fi
-
+if [[ $IRIS_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-iris.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iris.conf; fi
+if [[ $RETRIEVAL_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-retrieval.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-retrieval.conf; fi
+if [[ $IIP_JP2_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-iipjp2.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iipjp2.conf; fi
+if [[ $WEB_UI_DEVELOPMENT = true ]]; then docker cp "${PWD}/configs/nginx/web-ui-dev-cors.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/web-ui-dev-cors.conf; fi
 docker start ${INSTANCE_PREFIX}nginx
 
 
@@ -284,7 +300,7 @@ then
     --restart=unless-stopped \
     $SLURM_NAMESPACE/slurm:$SLURM_VERSION > /dev/null
 
-    docker cp $PWD/hosts/slurm/addHosts.sh ${INSTANCE_PREFIX}slurm:/tmp/addHosts.sh
+    docker cp "${PWD}/hosts/slurm/addHosts.sh" ${INSTANCE_PREFIX}slurm:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}slurm
 fi
 
@@ -303,8 +319,8 @@ then
     -p 22 \
     $SOFTWAREROUTER_NAMESPACE/software_router:$SOFTWAREROUTER_VERSION > /dev/null
 
-    docker cp $PWD/hosts/software_router/addHosts.sh ${INSTANCE_PREFIX}software_router:/tmp/addHosts.sh
-    docker cp $PWD/configs/software_router/config.groovy ${INSTANCE_PREFIX}software_router:/opt/config.groovy
-    docker cp $PWD/configs/software_router/log4j.properties ${INSTANCE_PREFIX}software_router:/opt/log4j.properties
+    docker cp "${PWD}/hosts/software_router/addHosts.sh" ${INSTANCE_PREFIX}software_router:/tmp/addHosts.sh
+    docker cp "${PWD}/configs/software_router/config.groovy" ${INSTANCE_PREFIX}software_router:/opt/config.groovy
+    docker cp "${PWD}/configs/software_router/log4j.properties" ${INSTANCE_PREFIX}software_router:/opt/log4j.properties
     docker start ${INSTANCE_PREFIX}software_router
 fi

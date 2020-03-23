@@ -70,5 +70,9 @@ grails.plugin.springsecurity.failureHandler.ajaxAuthFailUrl = "${grails.UIURL}/l
 grails.plugin.springsecurity.logout.afterLogoutUrl = "${grails.UIURL}/"
 grails.plugin.springsecurity.logout. alwaysUseDefaultTargetUrl = true
 
+cytomine.software.path.softwareImages='$SOFTWARE_DOCKER_IMAGES_PATH'
+
+grails.useHTTPInternally = false
+
 biaflows.workflows.metrics=$BIAFLOWS_WORKFLOWS_METRICS
 biaflows.workflows.export=$BIAFLOWS_WORKFLOWS_EXPORT

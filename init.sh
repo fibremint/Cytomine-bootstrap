@@ -21,7 +21,7 @@
 . configuration-versions.sh
 
 # Fix container aliases for core/ims development
-ALIASES=('POSTGRES_ALIAS' 'MONGODB_ALIAS' 'RABBITMQ_ALIAS' 'BIOFORMAT_ALIAS' 'CORE_ALIAS' 'IMS_ALIAS' 'IMS_PORT')
+ALIASES=('POSTGRES_ALIAS' 'MONGODB_ALIAS' 'RABBITMQ_ALIAS' 'BIOFORMAT_ALIAS' 'CORE_ALIAS' 'IMS_ALIAS' 'IMS_PORT' 'WEB_UI_ALIAS' 'WEB_UI_PORT')
 POSTGRES_ALIAS=postgresql
 MONGODB_ALIAS=mongodb
 RABBITMQ_ALIAS=rabbitmq
@@ -29,6 +29,9 @@ BIOFORMAT_ALIAS=bioformat
 CORE_ALIAS=core
 IMS_ALIAS=ims
 IMS_PORT=8080
+WEB_UI_ALIAS=webUI
+WEB_UI_PORT=80
+
 if [[ $CORE_DEVELOPMENT = true ]]; then
     POSTGRES_ALIAS=localhost
     MONGODB_ALIAS=localhost
@@ -40,6 +43,14 @@ if [[ $IMS_DEVELOPMENT = true ]]; then
     IMS_ALIAS=172.17.0.1
     IMS_PORT=9080
 fi
+if [[ $WEB_UI_DEVELOPMENT = true ]]; then
+    WEB_UI_ALIAS=172.17.0.1
+    WEB_UI_PORT=8081
+fi
+if [[ $BIOFORMAT_DEVELOPMENT = true ]]; then
+    BIOFORMAT_ALIAS=172.17.0.1
+fi
+
 
 # Get variables in configuration.sh
 VARIABLES=()
@@ -107,11 +118,29 @@ for i in ${FILES[@]}; do
                 sed -i "/--link ${INSTANCE_PREFIX}ims:ims/d" $i;
             fi
 
+            # Remove bindings to container webUI for webUi development
+            if [[ $WEB_UI_DEVELOPMENT = true ]]; then
+                sed -i "/--link ${INSTANCE_PREFIX}webUI:webUI/d" $i;
+            else
+                sed -i "/include \/usr\/local\/nginx\/conf\/web-ui-dev-cors.conf;/d" $i;
+            fi
+
+            # Remove bindings to container Bioformat for bioformat developement
+            if [[ $BIOFORMAT_DEVELOPMENT = true ]]; then
+                sed -i "/--link ${INSTANCE_PREFIX}bioformat:bioformat/d" $i;
+            fi
+
             # Remove ssl in nginx config if http is used as protocol
             if [[ $HTTP_PROTOCOL == "http" || $HTTP_PROXY = true ]]; then
                 sed -i "/ssl_/d" $i;
                 sed -i "/443 ssl/d" $i;
                 sed -i "/-v ${CERTIFICATE_PATH//\//\\/}:\/certificates/d" $i;
+            fi
+
+            if [[ $HTTP_PROTOCOL == "https" ]]; then
+              sed -i "/$IMS_URL\" >> \/etc\/hosts/d" $i;
+              sed -i "/$CORE_URL\" >> \/etc\/hosts/d" $i;
+              sed -i "/$UPLOAD_URL\" >> \/etc\/hosts/d" $i;
             fi
 
         # For Mac OS, the sed command is interpreted differently
@@ -143,11 +172,29 @@ for i in ${FILES[@]}; do
                 sed -i '' -e "/--link ${INSTANCE_PREFIX}ims:ims/d" $i;
             fi
 
+            # Remove bindings to container webUI for webUi development
+            if [[ $WEB_UI_DEVELOPMENT = true ]]; then
+                sed -i '' -e "/--link ${INSTANCE_PREFIX}webUI:webUI/d" $i;
+            else
+                sed -i '' -e "/include \/usr\/local\/nginx\/conf\/web-ui-dev-cors.conf;/d" $i;
+            fi
+
+            # Remove bindings to container Bioformat for bioformat developement
+            if [[ $BIOFORMAT_DEVELOPMENT = true ]]; then
+                sed -i '' -e "/--link ${INSTANCE_PREFIX}bioformat:bioformat/d" $i;
+            fi
+
             # Remove ssl in nginx config if http is used as protocol
             if [[ $HTTP_PROTOCOL == "http" || $HTTP_PROXY = true ]]; then
                 sed -i '' -e "/ssl_/d" $i;
                 sed -i '' -e "/443 ssl/d" $i;
                 sed -i '' -e "/-v ${CERTIFICATE_PATH//\//\\/}:/certificates/d" $i;
+            fi
+
+            if [[ $HTTP_PROTOCOL == "https" ]]; then
+              sed -i '' -e "/$IMS_URL\" >> \/etc\/hosts/d" $i;
+              sed -i '' -e "/$CORE_URL\" >> \/etc\/hosts/d" $i;
+              sed -i '' -e "/$UPLOAD_URL\" >> \/etc\/hosts/d" $i;
             fi
         fi
     fi
