@@ -59,7 +59,7 @@ SERVER_SSHKEYS_FILE="$SERVER_SSHKEYS_PATH/id_rsa"
 if [ ! -e $SERVER_SSHKEYS_FILE ]
 then
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
-        apt-get install -y ssh-keygen
+        apt-get install -y openssh-client
     fi
     ssh-keygen -t rsa -m PEM -N "" -C $CORE_URL -f $SERVER_SSHKEYS_FILE
 fi
