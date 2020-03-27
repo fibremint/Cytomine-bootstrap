@@ -13,7 +13,7 @@ cytomine.software.descriptorFile="descriptor.json"
 cytomine.software.ssh.maxRetries=3
 cytomine.software.repositoryManagerRefreshRate=300
 
-cytomine.software.path.softwareSources='$SOFTWARE_CODE_PATH'
+cytomine.software.path.softwareSources='/tmp/code'
 cytomine.software.path.softwareImages='$SOFTWARE_DOCKER_IMAGES_PATH'
-cytomine.software.jobs='$JOBS_PATH'
+cytomine.software.jobs='/tmp/jobs'
 cytomine.software.sshKeysFile='$SERVER_SSHKEYS_PATH/id_rsa'

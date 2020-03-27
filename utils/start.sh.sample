@@ -203,10 +203,9 @@ then
     docker create --name ${INSTANCE_PREFIX}ims \
     --link ${INSTANCE_PREFIX}bioformat:bioformat \
     -e IMS_STORAGE_PATH=$IMS_STORAGE_PATH \
-    -e FAST_DATA_PATH=$FAST_DATA_PATH \
+    -e FAST_DATA_PATH=$IMS_STORAGE_PATH \
     -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
     -v $IMS_BUFFER_PATH:/tmp/uploaded \
-    -v $FAST_DATA_PATH:$FAST_DATA_PATH \
     --restart=unless-stopped \
     $IMS_NAMESPACE/ims:$IMS_VERSION > /dev/null
 
@@ -311,9 +310,7 @@ then
     --link ${INSTANCE_PREFIX}rabbitmq:rabbitmq \
     --link ${INSTANCE_PREFIX}slurm:slurm \
     --privileged \
-    -v $SOFTWARE_CODE_PATH:$SOFTWARE_CODE_PATH \
     -v $SOFTWARE_DOCKER_IMAGES_PATH:$SOFTWARE_DOCKER_IMAGES_PATH \
-    -v $JOBS_PATH:$JOBS_PATH \
     -v $SERVER_SSHKEYS_PATH:$SERVER_SSHKEYS_PATH \
     --restart=unless-stopped \
     -p 22 \

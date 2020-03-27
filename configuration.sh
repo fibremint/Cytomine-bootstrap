@@ -26,7 +26,6 @@
 #------------------------------------------------------------------------------
 
 # These URLs have to be accessible (add them to /etc/hosts if you run it locally)
-UI_URL=biaflows
 CORE_URL=biaflows
 IMS_URL=biaflows-ims
 UPLOAD_URL=biaflows-upload
@@ -34,8 +33,7 @@ UPLOAD_URL=biaflows-upload
 # These paths must exist
 IMS_STORAGE_PATH=/biaflows/data/images
 IMS_BUFFER_PATH=/biaflows/data/_buffer
-FAST_DATA_PATH=/biaflows/data/images
-SOFTWARE_DOCKER_IMAGES_PATH=/biaflows/data/softwares/images
+SOFTWARE_DOCKER_IMAGES_PATH=/biaflows/data/workflows
 SERVER_SSHKEYS_PATH=/biaflows/data/ssh
 
 # Ask workflows to compute metrics and upload results to BIAFLOWS
@@ -127,8 +125,6 @@ IRIS_VOLUME=iris_data
 # PLUGIN: SOFTWARE
 #------------------------------------------------------------------------------
 SOFTWARE_ENABLED=true
-SOFTWARE_CODE_PATH=/biaflows/data/softwares/code
-JOBS_PATH=/biaflows/data/jobs
 
 # Advanced configuration.
 RABBITMQ_LOGIN="router"

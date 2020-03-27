@@ -18,7 +18,7 @@ cytomine.customUI.global = [
         software : ["ALL"]
 ]
 
-grails.UIURL='$HTTP_PROTOCOL://$UI_URL'
+grails.UIURL='$HTTP_PROTOCOL://$CORE_URL'
 grails.serverURL='$HTTP_PROTOCOL://$CORE_URL'
 grails.imageServerURL=['$HTTP_PROTOCOL://$IMS_URL']
 grails.retrievalServerURL =['http://$RETRIEVAL_URL']
@@ -26,7 +26,7 @@ grails.uploadURL='$HTTP_PROTOCOL://$UPLOAD_URL'
 
 storage_buffer='$IMS_BUFFER_PATH'
 storage_path='$IMS_STORAGE_PATH'
-fast_data_path='$FAST_DATA_PATH'
+fast_data_path='$IMS_STORAGE_PATH'
 
 grails.iris.enabled=$IRIS_ENABLED
 grails.retrieval.enabled=$RETRIEVAL_ENABLED
