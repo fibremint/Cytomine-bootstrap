@@ -68,9 +68,9 @@ http {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
     # keys_zone - 1MB -> +/- 8000 keys
-    proxy_cache_path /cache/thumb levels=1:2 keys_zone=thumb_cache:100m max_size=10g inactive=60d use_temp_path=off;
-    proxy_cache_path /cache/crop levels=1:2 keys_zone=crop_cache:100m max_size=10g inactive=3d use_temp_path=off;
-    proxy_cache_path /cache/tile levels=1:2 keys_zone=tile_cache:100m max_size=10g inactive=3d use_temp_path=off;
+    uwsgi_cache_path /cache/thumb levels=1:2 keys_zone=thumb_cache:100m max_size=10g inactive=60d use_temp_path=off;
+    uwsgi_cache_path /cache/crop levels=1:2 keys_zone=crop_cache:100m max_size=10g inactive=3d use_temp_path=off;
+    uwsgi_cache_path /cache/tile levels=1:2 keys_zone=tile_cache:100m max_size=10g inactive=3d use_temp_path=off;
 
 
     ssl_protocols TLSv1.1 TLSv1.2;

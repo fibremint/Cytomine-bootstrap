@@ -222,13 +222,10 @@ then
     -v $IMS_BUFFER_PATH:/tmp/uploaded \
     -v $FAST_DATA_PATH:$FAST_DATA_PATH \
     --restart=unless-stopped \
-    $IMS_NAMESPACE/ims:$IMS_VERSION > /dev/null
+    $IMS_NAMESPACE/pims:$IMS_VERSION > /dev/null
 
-    if [ -e "${PWD}/artifacts/IMS.war" ]; then
-        docker cp "${PWD}/artifacts/IMS.war" ${INSTANCE_PREFIX}ims:/var/lib/tomcat7/webapps/ROOT.war
-    fi
-
-    docker cp "${PWD}/configs/ims/ims-config.groovy" ${INSTANCE_PREFIX}ims:/usr/share/tomcat7/.grails/ims-config.groovy
+    docker cp "${PWD}/configs/ims/pims.cfg" ${INSTANCE_PREFIX}ims:/app/app-config.cfg
+    docker cp "${PWD}/configs/ims/uwsgi.ini" ${INSTANCE_PREFIX}ims:/app/uwsgi.ini
     docker cp "${PWD}/hosts/ims/addHosts.sh" ${INSTANCE_PREFIX}ims:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}ims
 fi

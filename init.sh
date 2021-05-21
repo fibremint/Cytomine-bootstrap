@@ -28,7 +28,7 @@ RABBITMQ_ALIAS=rabbitmq
 BIOFORMAT_ALIAS=bioformat
 CORE_ALIAS=core
 IMS_ALIAS=ims
-IMS_PORT=8080
+IMS_PORT=5000
 WEB_UI_ALIAS=webUI
 WEB_UI_PORT=80
 HMS_ALIAS=hms
@@ -43,7 +43,7 @@ fi
 if [[ $IMS_DEVELOPMENT = true ]]; then
     BIOFORMAT_ALIAS=bioformat
     IMS_ALIAS=172.17.0.1
-    IMS_PORT=9080
+    IMS_PORT=5000
 fi
 if [[ $WEB_UI_DEVELOPMENT = true ]]; then
     WEB_UI_ALIAS=172.17.0.1
