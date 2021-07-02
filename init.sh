@@ -128,6 +128,7 @@ for i in ${FILES[@]}; do
             # Remove bindings to container webUI for webUi development
             if [[ $WEB_UI_DEVELOPMENT = true ]]; then
                 sed -i "/--link ${INSTANCE_PREFIX}webUI:webUI/d" $i;
+                sed -i "/add_header Access-Control-/d" $i;
             else
                 sed -i "/include \/usr\/local\/nginx\/conf\/web-ui-dev-cors.conf;/d" $i;
             fi
@@ -190,6 +191,7 @@ for i in ${FILES[@]}; do
             # Remove bindings to container webUI for webUi development
             if [[ $WEB_UI_DEVELOPMENT = true ]]; then
                 sed -i '' -e "/--link ${INSTANCE_PREFIX}webUI:webUI/d" $i;
+                sed -i '' -e "/add_header Access-Control-/d" $i;
             else
                 sed -i '' -e "/include \/usr\/local\/nginx\/conf\/web-ui-dev-cors.conf;/d" $i;
             fi
