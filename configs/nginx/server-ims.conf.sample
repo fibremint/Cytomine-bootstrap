@@ -15,10 +15,10 @@ server {
     ssl_certificate_key /certificates/$IMS_URL-key.pem;
 
     location / {
-        proxy_pass http://backend-ims;
-
         include /usr/local/nginx/conf/web-ui-dev-cors.conf;
-        add_header Access-Control-Allow-Origin '*';
+        add_header Access-Control-Allow-Origin '*' always;
+
+        proxy_pass http://backend-ims;
     }
 
     location /slice/histogram {
@@ -107,7 +107,7 @@ server {
         add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
         add_header Access-Control-Allow-Headers 'Content-Type, Content-Range, Content-Disposition, Content-Description, date, dateFull, authorization,content-type-full';
         add_header Access-Control-Max-Age '1728000';
-        add_header Access-Control-Allow-Origin '*';
+        add_header Access-Control-Allow-Origin *;
         include /usr/local/nginx/conf/web-ui-dev-cors.conf;
     }
 
@@ -116,7 +116,7 @@ server {
         proxy_pass   http://backend-ims;
         proxy_read_timeout 600;
 
-        add_header Access-Control-Allow-Origin '*';
+        add_header Access-Control-Allow-Origin '*' always;
         include /usr/local/nginx/conf/web-ui-dev-cors.conf;
     }
 
