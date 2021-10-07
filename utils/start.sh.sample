@@ -75,16 +75,15 @@ docker start ${INSTANCE_PREFIX}memcached
 
 
 # ----- RABBITMQ -----
-if [[ $SOFTWARE_ENABLED = true ]]
-then
-    docker create --name ${INSTANCE_PREFIX}rabbitmq \
-    -p 5672:5672 -p 15672:15672 \
-    -e RABBITMQ_PASS=$RABBITMQ_PASSWORD \
-    --restart=unless-stopped \
-    $RABBITMQ_NAMESPACE/rabbitmq:$RABBITMQ_VERSION > /dev/null
+docker create --name ${INSTANCE_PREFIX}rabbitmq \
+-p 5672:5672 -p 15672:15672 \
+--hostname rabbitmq \
+--restart=unless-stopped \
+rabbitmq:$RABBITMQ_VERSION > /dev/null
 
-    docker start ${INSTANCE_PREFIX}rabbitmq
-fi
+docker cp "${PWD}/configs/rabbitmq/rabbitmq.conf" ${INSTANCE_PREFIX}rabbitmq:/etc/rabbitmq/rabbitmq.conf
+docker start ${INSTANCE_PREFIX}rabbitmq
+
 
 
 # ----- POSTGRESQL ------

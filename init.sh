@@ -106,14 +106,12 @@ for i in ${FILES[@]}; do
             if [[ $RETRIEVAL_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}retrieval:retrieval/d" $i; fi
             if [[ $BIOFORMAT_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}bioformat:bioformat/d" $i; fi
             if [[ $IIP_JP2_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}iipJP2:iipJP2/d" $i; fi
-            if [[ $SOFTWARE_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}rabbitmq:rabbitmq/d" $i; fi
             if [[ $HMS_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}hms:hms/d" $i; fi
 
             # Remove bindings to container CORE for core development
             if [[ $CORE_DEVELOPMENT = true ]]; then
                 sed -i "/--link ${INSTANCE_PREFIX}core:core/d" $i
             else
-                sed -i "/-p 5672:5672 -p 15672:15672/d" $i
                 sed -i "/-p 5432:5432/d" $i
                 sed -i "/-p 27017:27017 -p 28017:28017/d" $i
                 sed -i "/-p 10022:22/d" $i
@@ -140,6 +138,10 @@ for i in ${FILES[@]}; do
 
             if [[ $HMS_DEVELOPMENT = true ]]; then
                 sed -i "/--link ${INSTANCE_PREFIX}hms:hms/d" $i;
+            fi
+
+            if [[ $CORE_DEVELOPMENT = false && $IMS_DEVELOPMENT = false ]]; then
+                sed -i "/-p 5672:5672 -p 15672:15672/d" $i;
             fi
 
             # Remove ssl in nginx config if http is used as protocol
@@ -169,14 +171,12 @@ for i in ${FILES[@]}; do
             if [[ $RETRIEVAL_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}retrieval:retrieval/d" $i; fi
             if [[ $BIOFORMAT_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}bioformat:bioformat/d" $i; fi
             if [[ $IIP_JP2_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}iipJP2:iipJP2/d" $i; fi
-            if [[ $SOFTWARE_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}rabbitmq:rabbitmq/d" $i; fi
             if [[ $HMS_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}hms:hms/d" $i; fi
 
             # Remove bindings to container CORE for core development
             if [[ $CORE_DEVELOPMENT = true ]]; then 
                 sed -i '' -e "/--link ${INSTANCE_PREFIX}core:core/d" $i
             else
-                sed -i '' -e "/-p 5672:5672 -p 15672:15672/d" $i
                 sed -i '' -e "/-p 5432:5432/d" $i
                 sed -i '' -e "/-p 27017:27017 -p 28017:28017/d" $i
                 sed -i '' -e "/-p 10022:22/d" $i
@@ -203,6 +203,11 @@ for i in ${FILES[@]}; do
 
             if [[ $HMS_DEVELOPMENT = true ]]; then
                 sed -i '' -e "/--link ${INSTANCE_PREFIX}hms:hms/d" $i;
+            fi
+
+
+            if [[ $CORE_DEVELOPMENT = false && $IMS_DEVELOPMENT = false ]]; then
+                sed -i '' -e "/-p 5672:5672 -p 15672:15672/d" $i;
             fi
 
             # Remove ssl in nginx config if http is used as protocol

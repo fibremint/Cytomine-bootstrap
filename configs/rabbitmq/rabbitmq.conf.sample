@@ -1,0 +1,2 @@
+default_user = $RABBITMQ_LOGIN
+default_pass = $RABBITMQ_PASSWORD
