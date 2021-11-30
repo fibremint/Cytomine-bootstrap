@@ -27,7 +27,6 @@ echo "* Plugins *"
 echo "BACKUP=$BACKUP_ENABLED"
 echo "RETRIEVAL=$RETRIEVAL_ENABLED"
 echo "IRIS=$IRIS_ENABLED"
-echo "IIPJP2=$IIP_JP2_ENABLED"
 echo "BIOFORMAT=$BIOFORMAT_ENABLED"
 echo "SOFTWARE=$SOFTWARE_ENABLED"
 echo "CORE_DEVELOPMENT=$CORE_DEVELOPMENT"
@@ -44,12 +43,8 @@ echo "$MONGODB_NAMESPACE/mongodb:$MONGODB_VERSION"
 if [[ $BACKUP_ENABLED = true ]]; then echo "$BACKUP_NAMESPACE/backup:$BACKUP_VERSION"; fi
 if [[ $IMS_DEVELOPMENT = false ]]; then echo "$IMS_NAMESPACE/ims:$IMS_VERSION"; fi
 if [[ $BIOFORMAT_ENABLED = true ]]; then echo "$BIOFORMAT_NAMESPACE/bioformat:$BIOFORMAT_VERSION"; fi
-echo "$IIPCYTO_NAMESPACE/iip-cyto:$IIPCYTO_VERSION"
-if [[ $IIP_JP2_ENABLED = true ]]; then echo "$IIPJP2_NAMESPACE/iip-jp2000:$IIPJP2_VERSION"; fi
-echo "$MEMCACHED_NAMESPACE/memcached:$MEMCACHED_VERSION"
 if [[ $RETRIEVAL_ENABLED = true ]]; then echo "$RETRIEVAL_NAMESPACE/retrieval:$RETRIEVAL_VERSION"; fi
 if [[ $IRIS_ENABLED = true ]]; then echo "$IRIS_NAMESPACE/iris:$IRIS_VERSION"; fi
-if [[ $SOFTWARE_ENABLED = true ]]; then echo "$RABBITMQ_NAMESPACE/rabbitmq:$RABBITMQ_VERSION"; fi
 if [[ $SOFTWARE_ENABLED = true ]]; then echo "$SLURM_NAMESPACE/slurm:$SLURM_VERSION"; fi
 if [[ $SOFTWARE_ENABLED = true ]]; then echo "$SOFTWAREROUTER_NAMESPACE/software_router:$SOFTWAREROUTER_VERSION"; fi
 echo ""
@@ -63,15 +58,6 @@ then
     fi
     ssh-keygen -t rsa -N "" -C $CORE_URL -f $SERVER_SSHKEYS_FILE
 fi
-
-
-# ----- MEMCACHED -----
-docker create --name ${INSTANCE_PREFIX}memcached \
---restart=unless-stopped \
-$MEMCACHED_NAMESPACE/memcached:$MEMCACHED_VERSION > /dev/null
-
-docker cp "${PWD}/configs/memcached/memcached.conf" ${INSTANCE_PREFIX}memcached:/etc/memcached.conf
-docker start ${INSTANCE_PREFIX}memcached
 
 
 # ----- RABBITMQ -----
@@ -153,34 +139,6 @@ then
     docker cp "${PWD}/hosts/retrieval/addHosts.sh" ${INSTANCE_PREFIX}retrieval:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}retrieval
 fi
-
-# ----- IIP JP2 -----
-if [[ $IIP_JP2_ENABLED = true ]]
-then
-    docker create --name ${INSTANCE_PREFIX}iipJP2 \
-    --link ${INSTANCE_PREFIX}memcached:memcached \
-    -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
-    --privileged \
-    -e NB_IIP_PROCESS=$NB_IIP_PROCESS \
-    --restart=unless-stopped \
-    $IIPJP2_NAMESPACE/iip-jp2000:$IIPJP2_VERSION > /dev/null
-
-    docker cp "${PWD}/configs/iipJP2/nginx.conf.sample" ${INSTANCE_PREFIX}iipJP2:/tmp/nginx.conf.sample
-    docker start ${INSTANCE_PREFIX}iipJP2
-fi
-
-# ----- IIP CYTO -----
-docker create --name ${INSTANCE_PREFIX}iipCyto \
---link ${INSTANCE_PREFIX}memcached:memcached \
--v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
---privileged \
--e NB_IIP_PROCESS=$NB_IIP_PROCESS \
---restart=unless-stopped \
-$IIPCYTO_NAMESPACE/iip-cyto:$IIPCYTO_VERSION > /dev/null
-
-docker cp "${PWD}/configs/iipCyto/nginx.conf.sample" ${INSTANCE_PREFIX}iipCyto:/tmp/nginx.conf.sample
-docker cp "${PWD}/configs/iipCyto/iip-configuration.sh" ${INSTANCE_PREFIX}iipCyto:/tmp/iip-configuration.sh
-docker start ${INSTANCE_PREFIX}iipCyto
 
 
 # ----- BIOFORMAT -----
@@ -291,9 +249,7 @@ docker create --name ${INSTANCE_PREFIX}nginx \
 --link ${INSTANCE_PREFIX}iris:iris \
 --link ${INSTANCE_PREFIX}ims:ims \
 --link ${INSTANCE_PREFIX}retrieval:retrieval \
---link ${INSTANCE_PREFIX}iipCyto:iipCyto \
 --link ${INSTANCE_PREFIX}core:core \
---link ${INSTANCE_PREFIX}iipJP2:iipJP2 \
 --link ${INSTANCE_PREFIX}webUI:webUI \
 --link ${INSTANCE_PREFIX}hms:hms \
 -v $IMS_BUFFER_PATH:/tmp/uploaded \
@@ -309,7 +265,6 @@ docker cp "${PWD}/configs/nginx/server-ims.conf" ${INSTANCE_PREFIX}nginx:/usr/lo
 
 if [[ $IRIS_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-iris.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iris.conf; fi
 if [[ $RETRIEVAL_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-retrieval.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-retrieval.conf; fi
-if [[ $IIP_JP2_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-iipjp2.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iipjp2.conf; fi
 if [[ $HMS_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-hms.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-hms.conf; fi
 if [[ $WEB_UI_DEVELOPMENT = true ]]; then docker cp "${PWD}/configs/nginx/web-ui-dev-cors.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/web-ui-dev-cors.conf; fi
 docker start ${INSTANCE_PREFIX}nginx

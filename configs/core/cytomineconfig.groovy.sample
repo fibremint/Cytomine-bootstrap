@@ -33,7 +33,6 @@ grails.iris.enabled=$IRIS_ENABLED
 grails.retrieval.enabled=$RETRIEVAL_ENABLED
 grails.backup.enabled=$BACKUP_ENABLED
 grails.bioformat.enabled=$BIOFORMAT_ENABLED
-grails.iipJP2.enabled=$IIP_JP2_ENABLED
 grails.software.enabled=$SOFTWARE_ENABLED
 grails.core.dev=$CORE_DEVELOPMENT
 grails.ims.dev=$IMS_DEVELOPMENT
@@ -60,7 +59,7 @@ grails.mongo.options.threadsAllowedToBlockForConnectionMultiplier=10
 grails.retrievalUsername = 'cytomine'
 grails.retrievalPassword = '$RETRIEVAL_PASSWORD'
 
-grails.messageBrokerServerURL='$RABBITMQ_ALIAS:5672'
+grails.messageBrokerServerURL='$RABBITMQ_CORE_ALIAS:5672'
 
 grails.serverID='$SERVER_ID'
 

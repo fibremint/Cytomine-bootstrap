@@ -18,9 +18,6 @@
 
 echo "Stopping Cytomine... Data will be preserved in databases."
 
-docker stop ${INSTANCE_PREFIX}memcached
-docker rm -v ${INSTANCE_PREFIX}memcached
-
 if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}rabbitmq)" ]]
 then
     docker stop ${INSTANCE_PREFIX}rabbitmq
@@ -49,15 +46,6 @@ then
     docker stop ${INSTANCE_PREFIX}retrieval
     docker rm -v ${INSTANCE_PREFIX}retrieval
 fi
-
-if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}iipJP2)" ]]
-then
-    docker stop ${INSTANCE_PREFIX}iipJP2
-    docker rm -v ${INSTANCE_PREFIX}iipJP2
-fi
-
-docker stop ${INSTANCE_PREFIX}iipCyto
-docker rm -v ${INSTANCE_PREFIX}iipCyto
 
 if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}bioformat)" ]]
 then

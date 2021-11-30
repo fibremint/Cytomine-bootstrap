@@ -1,6 +1,4 @@
 echo "#Custom adding" >> /etc/hosts
 echo "$(route -n | awk '/UG[ \t]/{print $2}')       $CORE_URL" >> /etc/hosts
-echo "$(route -n | awk '/UG[ \t]/{print $2}')       $IIP_JP2_URL" >> /etc/hosts
-echo "$(route -n | awk '/UG[ \t]/{print $2}')       $IIP_CYTO_URL" >> /etc/hosts
 echo "$(route -n | awk '/UG[ \t]/{print $2}')       $IMS_URL" >> /etc/hosts
 echo "$(route -n | awk '/UG[ \t]/{print $2}')       $HMS_URL" >> /etc/hosts

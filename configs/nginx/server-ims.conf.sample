@@ -2,10 +2,6 @@ upstream backend-ims {
     server $IMS_ALIAS:$IMS_PORT;
 }
 
-upstream backend-iip {
-    server iipCyto:80;
-}
-
 server {
     listen 80;
     listen 443 ssl http2;
@@ -123,14 +119,5 @@ server {
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   html;
-    }
-}
-
-server {
-    listen 80;
-    server_name  $IIP_CYTO_URL;
-
-    location / {
-        proxy_pass http://backend-iip;
     }
 }
