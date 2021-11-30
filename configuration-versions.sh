@@ -14,14 +14,10 @@
 
 # -- CYTOMINE APP RELEASE VERSION --
 CYTOMINE_FLAVOR=ULiege
-CYTOMINE_VERSION=2021.1
+CYTOMINE_VERSION=2021.2
 # --
 
-MEMCACHED_NAMESPACE=cytomineuliege
-MEMCACHED_VERSION=v1.1.2
-
-# We now use official rabbitmq image
-#RABBITMQ_NAMESPACE=cytomineuliege
+# Official RabbitMQ image
 RABBITMQ_VERSION=3.9
 
 POSTGRES_NAMESPACE=cytomineuliege
@@ -40,7 +36,7 @@ BIOFORMAT_NAMESPACE=cytomineuliege
 BIOFORMAT_VERSION=v2.3.1
 
 IMS_NAMESPACE=cytomineuliege
-IMS_VERSION=v0.2
+IMS_VERSION=v0.6.2-all-plugins
 
 CORE_NAMESPACE=cytomineuliege
 CORE_VERSION=v2.3.0
@@ -65,3 +61,6 @@ PROJECT_MIGRATOR_VERSION=v0.1
 
 HMS_NAMESPACE=cytomineuliege
 HMS_VERSION=v1.1.0
+
+# Official Redis image as PIMS cache
+PIMS_CACHE_VERSION=6.2

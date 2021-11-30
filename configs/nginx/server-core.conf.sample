@@ -29,18 +29,6 @@ server {
 
         include /usr/local/nginx/conf/web-ui-dev-cors.conf;
     }
-    location /api/slicehistogram {
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_pass http://backend-core;
-        proxy_connect_timeout 600;
-        proxy_send_timeout 600;
-        proxy_read_timeout 600;
-        send_timeout 600;
-
-        include /usr/local/nginx/conf/web-ui-dev-cors.conf;
-    }
-
     location /j_spring_security { # _check, _logout, _switch_user, _exit_user
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;

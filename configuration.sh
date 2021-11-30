@@ -41,7 +41,7 @@ MONGODB_VOLUME=db_mongo
 
 WEB_UI_DEVELOPMENT=false
 #------------------------------------------------------------------------------
-# IMS
+# (P)IMS
 #------------------------------------------------------------------------------
 IMS_URL=localhost-ims
 UPLOAD_URL=localhost-upload
@@ -54,10 +54,11 @@ PROXY_CACHE_PATH=/data/cache
 # Advanced configuration.
 IMS_DEVELOPMENT=false
 
-IIP_OFF_URL=localhost-iip-cyto
-IIP_CYTO_URL=localhost-iip-cyto
-MEMCACHED_PASS="mypass"
-NB_IIP_PROCESS=10
+PIMS_CACHE_ENABLED=true
+PIMS_TASK_QUEUE_ENABLED=true
+
+PIMS_WEB_CONCURRENCY=4  # Replace $NB_IIP_PROCESS
+PIMS_WORKER_WEB_CONCURRENCY=4
 
 #------------------------------------------------------------------------------
 # PLUGIN: BACKUP

@@ -21,14 +21,18 @@
 . configuration-versions.sh
 
 # Fix container aliases for core/ims development
-ALIASES=('POSTGRES_ALIAS' 'MONGODB_ALIAS' 'RABBITMQ_ALIAS' 'BIOFORMAT_ALIAS' 'CORE_ALIAS' 'IMS_ALIAS' 'IMS_PORT' 'WEB_UI_ALIAS' 'WEB_UI_PORT' 'HMS_ALIAS' 'HMS_PORT')
+ALIASES=('POSTGRES_ALIAS' 'MONGODB_ALIAS' 'RABBITMQ_CORE_ALIAS' 'RABBITMQ_PIMS_ALIAS' 'BIOFORMAT_ALIAS' 'BIOFORMAT_PORT' 'CORE_ALIAS' 'IMS_ALIAS' 'IMS_PORT' 'PIMS_CACHE_ALIAS' 'PIMS_CACHE_PORT' 'WEB_UI_ALIAS' 'WEB_UI_PORT' 'HMS_ALIAS' 'HMS_PORT')
 POSTGRES_ALIAS=postgresql
 MONGODB_ALIAS=mongodb
-RABBITMQ_ALIAS=rabbitmq
+RABBITMQ_CORE_ALIAS=rabbitmq
+RABBITMQ_PIMS_ALIAS=rabbitmq
 BIOFORMAT_ALIAS=bioformat
+BIOFORMAT_PORT=4321
 CORE_ALIAS=core
 IMS_ALIAS=ims
 IMS_PORT=5000
+PIMS_CACHE_ALIAS=pims-cache
+PIMS_CACHE_PORT=6379
 WEB_UI_ALIAS=webUI
 WEB_UI_PORT=80
 HMS_ALIAS=hms
@@ -37,10 +41,12 @@ HMS_PORT=8080
 if [[ $CORE_DEVELOPMENT = true ]]; then
     POSTGRES_ALIAS=localhost
     MONGODB_ALIAS=localhost
-    RABBITMQ_ALIAS=localhost
+    RABBITMQ_CORE_ALIAS=localhost
     CORE_ALIAS=172.17.0.1
 fi
 if [[ $IMS_DEVELOPMENT = true ]]; then
+    PIMS_CACHE_ALIAS=localhost
+    RABBITMQ_PIMS_ALIAS=localhost
     BIOFORMAT_ALIAS=bioformat
     IMS_ALIAS=172.17.0.1
     IMS_PORT=5000
@@ -105,8 +111,8 @@ for i in ${FILES[@]}; do
             if [[ $IRIS_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}iris:iris/d" $i; fi
             if [[ $RETRIEVAL_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}retrieval:retrieval/d" $i; fi
             if [[ $BIOFORMAT_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}bioformat:bioformat/d" $i; fi
-            if [[ $IIP_JP2_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}iipJP2:iipJP2/d" $i; fi
             if [[ $HMS_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}hms:hms/d" $i; fi
+            if [[ $PIMS_CACHE_ENABLED = false ]]; then sed -i "/--link ${INSTANCE_PREFIX}pims-cache:pims-cache/d" $i; fi
 
             # Remove bindings to container CORE for core development
             if [[ $CORE_DEVELOPMENT = true ]]; then
@@ -121,6 +127,9 @@ for i in ${FILES[@]}; do
             # Remove bindings to container IMS for ims development
             if [[ $IMS_DEVELOPMENT = true ]]; then
                 sed -i "/--link ${INSTANCE_PREFIX}ims:ims/d" $i;
+                sed -i "/--link ${INSTANCE_PREFIX}ims-worker:ims-worker/d" $i;
+            else
+                sed -i "/-p 6379:6379/d" $i;
             fi
 
             # Remove bindings to container webUI for webUi development
@@ -170,8 +179,8 @@ for i in ${FILES[@]}; do
             if [[ $IRIS_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}iris:iris/d" $i; fi
             if [[ $RETRIEVAL_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}retrieval:retrieval/d" $i; fi
             if [[ $BIOFORMAT_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}bioformat:bioformat/d" $i; fi
-            if [[ $IIP_JP2_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}iipJP2:iipJP2/d" $i; fi
             if [[ $HMS_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}hms:hms/d" $i; fi
+            if [[ $PIMS_CACHE_ENABLED = false ]]; then sed -i '' -e "/--link ${INSTANCE_PREFIX}pims-cache:pims-cache/d" $i; fi
 
             # Remove bindings to container CORE for core development
             if [[ $CORE_DEVELOPMENT = true ]]; then 
@@ -186,6 +195,9 @@ for i in ${FILES[@]}; do
             # Remove bindings to container IMS for ims development
             if [[ $IMS_DEVELOPMENT = true ]]; then
                 sed -i '' -e "/--link ${INSTANCE_PREFIX}ims:ims/d" $i;
+                sed -i '' -e "/--link ${INSTANCE_PREFIX}ims-worker:ims-worker/d" $i;
+            else
+                sed -i '' -e "/-p 6379:6379/d" $i;
             fi
 
             # Remove bindings to container webUI for webUi development

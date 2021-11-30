@@ -59,6 +59,18 @@ then
     docker rm -v ${INSTANCE_PREFIX}ims
 fi
 
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}ims-worker)" ]]
+then
+    docker stop ${INSTANCE_PREFIX}ims-worker
+    docker rm -v ${INSTANCE_PREFIX}ims-worker
+fi
+
+if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}pims-cache)" ]]
+then
+    docker stop ${INSTANCE_PREFIX}pims-cache
+    docker rm -v ${INSTANCE_PREFIX}pims-cache
+fi
+
 if [[ "$(docker ps -q -f name=${INSTANCE_PREFIX}core)" ]]
 then
     docker stop ${INSTANCE_PREFIX}core

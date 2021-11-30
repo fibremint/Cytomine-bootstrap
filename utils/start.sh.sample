@@ -35,13 +35,16 @@ echo "WEB_UI_DEVELOPMENT=$WEB_UI_DEVELOPMENT"
 echo "BIOFORMAT_DEVELOPMENT=$BIOFORMAT_DEVELOPMENT"
 echo ""
 echo "* Container versions *"
+echo "rabbitmq:$RABBITMQ_VERSION"
 echo "$NGINX_NAMESPACE/nginx:$NGINX_VERSION"
 if [[ $CORE_DEVELOPMENT = false ]]; then echo "$CORE_NAMESPACE/core:$CORE_VERSION"; fi
 if [[ $WEB_UI_DEVELOPMENT = false ]]; then echo "$WEB_UI_NAMESPACE/web-ui:$WEB_UI_VERSION"; fi
 echo "$POSTGRES_NAMESPACE/postgres:$POSTGRES_VERSION"
 echo "$MONGODB_NAMESPACE/mongodb:$MONGODB_VERSION"
 if [[ $BACKUP_ENABLED = true ]]; then echo "$BACKUP_NAMESPACE/backup:$BACKUP_VERSION"; fi
-if [[ $IMS_DEVELOPMENT = false ]]; then echo "$IMS_NAMESPACE/ims:$IMS_VERSION"; fi
+if [[ $PIMS_CACHE_ENABLED = true ]]; then echo "pims-cache:$PIMS_CACHE_VERSION"; fi
+if [[ $IMS_DEVELOPMENT = false ]]; then echo "$IMS_NAMESPACE/pims:$IMS_VERSION"; fi
+if [[ $IMS_DEVELOPMENT = false && $PIMS_TASK_QUEUE_ENABLED = true ]]; then echo "$IMS_NAMESPACE/pims-worker:$IMS_VERSION"; fi
 if [[ $BIOFORMAT_ENABLED = true ]]; then echo "$BIOFORMAT_NAMESPACE/bioformat:$BIOFORMAT_VERSION"; fi
 if [[ $RETRIEVAL_ENABLED = true ]]; then echo "$RETRIEVAL_NAMESPACE/retrieval:$RETRIEVAL_VERSION"; fi
 if [[ $IRIS_ENABLED = true ]]; then echo "$IRIS_NAMESPACE/iris:$IRIS_VERSION"; fi
@@ -167,15 +170,25 @@ then
     docker start ${INSTANCE_PREFIX}hms
 fi
 
+# ----- PIMS CACHE ------
+if [[ $PIMS_CACHE_ENABLED = true ]]
+then
+    docker create --name ${INSTANCE_PREFIX}pims-cache \
+    -p 6379:6379 \
+    --restart=unless-stopped \
+    redis:$PIMS_CACHE_VERSION > /dev/null
+
+    docker start ${INSTANCE_PREFIX}pims-cache
+fi
 
 # ----- IMS -----
 if [[ $IMS_DEVELOPMENT = false ]]
 then
     docker create --name ${INSTANCE_PREFIX}ims \
+    --link ${INSTANCE_PREFIX}rabbitmq:rabbitmq \
     --link ${INSTANCE_PREFIX}bioformat:bioformat \
-    -e IMS_STORAGE_PATH=$IMS_STORAGE_PATH \
-    -e FAST_DATA_PATH=$FAST_DATA_PATH \
-    -e WEB_CONCURRENCY=$NB_IIP_PROCESS \
+    --link ${INSTANCE_PREFIX}pims-cache:pims-cache \
+    -e WEB_CONCURRENCY=$PIMS_WEB_CONCURRENCY \
     -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
     -v $IMS_BUFFER_PATH:/tmp/uploaded \
     -v $FAST_DATA_PATH:$FAST_DATA_PATH \
@@ -185,7 +198,26 @@ then
     docker cp "${PWD}/configs/ims/pims-config.env" ${INSTANCE_PREFIX}ims:/app/pims-config.env
     docker cp "${PWD}/hosts/ims/addHosts.sh" ${INSTANCE_PREFIX}ims:/tmp/addHosts.sh
     docker start ${INSTANCE_PREFIX}ims
+
+    if [[ $PIMS_TASK_QUEUE_ENABLED = true ]]
+    then
+        docker create --name ${INSTANCE_PREFIX}ims-worker \
+        --link ${INSTANCE_PREFIX}rabbitmq:rabbitmq \
+        --link ${INSTANCE_PREFIX}bioformat:bioformat \
+        --link ${INSTANCE_PREFIX}pims-cache:pims-cache \
+        -e WEB_CONCURRENCY=$PIMS_WORKER_WEB_CONCURRENCY \
+        -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
+        -v $IMS_BUFFER_PATH:/tmp/uploaded \
+        -v $FAST_DATA_PATH:$FAST_DATA_PATH \
+        --restart=unless-stopped \
+        $IMS_NAMESPACE/pims-worker:$IMS_VERSION > /dev/null
+
+        docker cp "${PWD}/configs/ims/pims-config.env" ${INSTANCE_PREFIX}ims-worker:/app/pims-config.env
+        docker cp "${PWD}/hosts/ims/addHosts.sh" ${INSTANCE_PREFIX}ims-worker:/tmp/addHosts.sh
+        docker start ${INSTANCE_PREFIX}ims-worker
+    fi
 fi
+
 
 # ----- CORE -----
 if [[ $CORE_DEVELOPMENT = false ]]
@@ -248,6 +280,7 @@ fi
 docker create --name ${INSTANCE_PREFIX}nginx \
 --link ${INSTANCE_PREFIX}iris:iris \
 --link ${INSTANCE_PREFIX}ims:ims \
+--link ${INSTANCE_PREFIX}ims-worker:ims-worker \
 --link ${INSTANCE_PREFIX}retrieval:retrieval \
 --link ${INSTANCE_PREFIX}core:core \
 --link ${INSTANCE_PREFIX}webUI:webUI \
