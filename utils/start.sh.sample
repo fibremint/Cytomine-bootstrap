@@ -189,7 +189,7 @@ then
     --link ${INSTANCE_PREFIX}pims-cache:pims-cache \
     -e WEB_CONCURRENCY=$PIMS_WEB_CONCURRENCY \
     -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
-    -v $IMS_BUFFER_PATH:/tmp/uploaded \
+    -v $IMS_BUFFER_PATH:$IMS_BUFFER_PATH \
     --restart=unless-stopped \
     $IMS_NAMESPACE/pims:$IMS_VERSION > /dev/null
 
@@ -205,7 +205,7 @@ then
         --link ${INSTANCE_PREFIX}pims-cache:pims-cache \
         -e WEB_CONCURRENCY=$PIMS_WORKER_WEB_CONCURRENCY \
         -v $IMS_STORAGE_PATH:$IMS_STORAGE_PATH \
-        -v $IMS_BUFFER_PATH:/tmp/uploaded \
+        -v $IMS_BUFFER_PATH:$IMS_BUFFER_PATH \
         --restart=unless-stopped \
         $IMS_NAMESPACE/pims-worker:$IMS_VERSION > /dev/null
 
@@ -282,7 +282,7 @@ docker create --name ${INSTANCE_PREFIX}nginx \
 --link ${INSTANCE_PREFIX}core:core \
 --link ${INSTANCE_PREFIX}webUI:webUI \
 --link ${INSTANCE_PREFIX}hms:hms \
--v $IMS_BUFFER_PATH:/tmp/uploaded \
+-v $IMS_BUFFER_PATH:$IMS_BUFFER_PATH \
 -v $CERTIFICATE_PATH:/certificates \
 -p $HTTP_NGINX_PORT:80 \
 -p $HTTPS_NGINX_PORT:443 \
