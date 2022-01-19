@@ -48,8 +48,6 @@ UPLOAD_URL=localhost-upload
 
 IMS_STORAGE_PATH=/data/images
 IMS_BUFFER_PATH=/tmp/uploaded
-FAST_DATA_PATH=/data/images
-PROXY_CACHE_PATH=/data/cache
 
 # Advanced configuration.
 IMS_DEVELOPMENT=false
