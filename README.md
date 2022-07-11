@@ -1,5 +1,7 @@
 # Cytomine Bootstrap
 
+**This repository is forked for implement slide prediction web service based on Cytomine. [Additional components](https://github.com/lunarbridge/slide-segmentation-service) are applied to Cytomine service.**
+
 > Cytomine bootstrap is the installer for Cytomine. The application can run on a server to allow remote users to access the web platform or locally on your own machine.
 
 [![Build Status](https://travis-ci.com/Cytomine-ULiege/Cytomine-bootstrap.svg?branch=master)](https://travis-ci.com/Cytomine-ULiege/Cytomine-bootstrap)
@@ -30,6 +32,7 @@ Basically,
 To restart the server, run `bash restart.sh`.
 
 You may be interested in [Cytomine parameter configuration reference](https://doc.cytomine.be/display/PubOp/Cytomine+configuration+reference).
+
 
 ## Documentation
 
