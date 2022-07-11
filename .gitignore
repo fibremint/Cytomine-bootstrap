@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 configs/core/cytomineconfig.groovy
+configs/hms/config.cfg
 configs/iipCyto/iip-configuration.sh
 configs/iipCyto/nginx.conf.sample
 configs/iipJP2/nginx.conf.sample
@@ -10,14 +11,18 @@ configs/iris/iris-production-config.groovy
 configs/nginx/nginx.conf
 configs/nginx/server-core-dev.conf
 configs/nginx/server-core.conf
+configs/nginx/server-hms.conf
 configs/nginx/server-iipjp2.conf
 configs/nginx/server-ims-dev.conf
 configs/nginx/server-ims.conf
 configs/nginx/server-iris.conf
 configs/nginx/server-retrieval.conf
+configs/nginx/server-slide-seg-frontend.conf
+configs/nginx/slide-seg-cors.conf
 configs/software_router/config.groovy
 configs/web-ui/configuration.json
 hosts/core/addHosts.sh
+hosts/hms/addHosts.sh
 hosts/ims/addHosts.sh
 hosts/iris/addHosts.sh
 hosts/project_migrator/addHosts.sh
@@ -25,3 +30,4 @@ hosts/retrieval/addHosts.sh
 hosts/slurm/addHosts.sh
 hosts/software_router/addHosts.sh
 start.sh
+configuration.test.sh

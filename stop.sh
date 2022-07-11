@@ -110,4 +110,10 @@ then
     docker rm -v ${INSTANCE_PREFIX}hms
 fi
 
+docker stop ${INSTANCE_PREFIX}ws
+docker rm -v ${INSTANCE_PREFIX}ws
+
+docker stop ${INSTANCE_PREFIX}slide-seg-frontend
+docker rm -v ${INSTANCE_PREFIX}slide-seg-frontend
+
 echo "Done."

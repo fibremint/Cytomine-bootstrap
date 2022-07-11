@@ -14,4 +14,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FILES=(configs/core/cytomineconfig.groovy configs/ims/ims-config.groovy configs/iipCyto/nginx.conf.sample configs/iipCyto/iip-configuration.sh configs/iipJP2/nginx.conf.sample configs/iris/iris-config.groovy configs/iris/iris-production-config.groovy configs/nginx/nginx.conf configs/nginx/server-core.conf configs/nginx/server-iipjp2.conf configs/nginx/server-ims.conf configs/nginx/server-iris.conf configs/nginx/server-retrieval.conf configs/software_router/config.groovy configs/web-ui/configuration.json utils/start.sh hosts/core/addHosts.sh hosts/ims/addHosts.sh hosts/retrieval/addHosts.sh hosts/iris/addHosts.sh hosts/software_router/addHosts.sh hosts/slurm/addHosts.sh hosts/project_migrator/addHosts.sh hosts/hms/addHosts.sh configs/nginx/server-hms.conf configs/hms/config.cfg)
+FILES=( 
+    configs/core/cytomineconfig.groovy 
+    configs/ims/ims-config.groovy 
+    configs/iipCyto/nginx.conf.sample 
+    configs/iipCyto/iip-configuration.sh 
+    configs/iipJP2/nginx.conf.sample 
+    configs/iris/iris-config.groovy 
+    configs/iris/iris-production-config.groovy 
+    configs/nginx/nginx.conf 
+    configs/nginx/server-core.conf 
+    configs/nginx/server-iipjp2.conf 
+    configs/nginx/server-ims.conf 
+    configs/nginx/server-iris.conf 
+    configs/nginx/server-retrieval.conf 
+    configs/nginx/server-slide-seg-frontend.conf 
+    configs/nginx/slide-seg-cors.conf
+    configs/software_router/config.groovy
+    configs/web-ui/configuration.json 
+    utils/start.sh hosts/core/addHosts.sh 
+    hosts/ims/addHosts.sh 
+    hosts/retrieval/addHosts.sh 
+    hosts/iris/addHosts.sh 
+    hosts/software_router/addHosts.sh 
+    hosts/slurm/addHosts.sh 
+    hosts/project_migrator/addHosts.sh
+    hosts/hms/addHosts.sh 
+    configs/nginx/server-hms.conf 
+    configs/hms/config.cfg)

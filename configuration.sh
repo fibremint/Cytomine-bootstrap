@@ -21,13 +21,17 @@
 # Advanced configuration should be edited only if you know what you are doing.
 # -----------------------------------------------------------------------------
 
-
+#------------------------------------------------------------------------------
+# SLIDE SEG SERVICE
+#------------------------------------------------------------------------------
+SLIDE_SEG_URL=localhost-sui
 
 #------------------------------------------------------------------------------
 # CORE
 #------------------------------------------------------------------------------
 UI_URL=localhost-core
 CORE_URL=localhost-core
+
 SENDER_EMAIL_SMTP_HOST='smtp.gmail.com'
 SENDER_EMAIL_SMTP_PORT='587'
 SENDER_EMAIL_PASS='passwd'

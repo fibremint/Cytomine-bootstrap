@@ -290,6 +290,24 @@ then
     docker start ${INSTANCE_PREFIX}iris
 fi
 
+# ----- SLIDE SEG WS -----
+docker create \
+  --link ${INSTANCE_PREFIX}postgresql:postgresql \
+  -p 3000:3000 \
+  --name  ${INSTANCE_PREFIX}ws \
+  fibremint/slide-seg-svc-ws
+
+docker start ${INSTANCE_PREFIX}ws
+
+# ----- SLIDE SEG FRONTEND -----
+docker create \
+  --link ${INSTANCE_PREFIX}ws:ws \
+  -p 5000:5000 \
+  --name  ${INSTANCE_PREFIX}slide-seg-frontend \
+  fibremint/slide-seg-svc-frontend
+
+docker start ${INSTANCE_PREFIX}slide-seg-frontend
+
 # ----- NGINX -----
 docker create --name ${INSTANCE_PREFIX}nginx \
 --link ${INSTANCE_PREFIX}iris:iris \
@@ -300,6 +318,8 @@ docker create --name ${INSTANCE_PREFIX}nginx \
 --link ${INSTANCE_PREFIX}iipJP2:iipJP2 \
 --link ${INSTANCE_PREFIX}webUI:webUI \
 --link ${INSTANCE_PREFIX}hms:hms \
+--link ${INSTANCE_PREFIX}ws:ws \
+--link ${INSTANCE_PREFIX}slide-seg-frontend:slide-seg-frontend \
 -v $IMS_BUFFER_PATH:/tmp/uploaded \
 -v $CERTIFICATE_PATH:/certificates \
 -p $HTTP_NGINX_PORT:80 \
@@ -310,6 +330,8 @@ $NGINX_NAMESPACE/nginx:$NGINX_VERSION > /dev/null
 docker cp "${PWD}/configs/nginx/nginx.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/nginx.conf
 docker cp "${PWD}/configs/nginx/server-core.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-core.conf
 docker cp "${PWD}/configs/nginx/server-ims.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-ims.conf
+docker cp "${PWD}/configs/nginx/server-slide-seg-frontend.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-slide-seg-frontend.conf
+docker cp "${PWD}/configs/nginx/slide-seg-cors.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/slide-seg-cors.conf
 
 if [[ $IRIS_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-iris.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-iris.conf; fi
 if [[ $RETRIEVAL_ENABLED = true ]]; then docker cp "${PWD}/configs/nginx/server-retrieval.conf" ${INSTANCE_PREFIX}nginx:/usr/local/nginx/conf/server-retrieval.conf; fi
