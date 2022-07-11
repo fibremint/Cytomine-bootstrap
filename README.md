@@ -1,6 +1,14 @@
 # Cytomine Bootstrap
 
-**This repository is forked for implement slide prediction web service based on Cytomine. [Additional components](https://github.com/lunarbridge/slide-segmentation-service) are applied to Cytomine service.**
+**This repository is forked for implement slide prediction web service based on Cytomine. [Additional components](https://github.com/lunarbridge/slide-segmentation-service) are applied to Cytomine Bootstrap.**
+
+Verified compatibility of system environment:
+* Ubuntu 18.04 (kernel version: 4.19)
+
+**Linux kernel version 5.x maybe encounter error at running software with `singularity`**
+
+---
+<br />
 
 > Cytomine bootstrap is the installer for Cytomine. The application can run on a server to allow remote users to access the web platform or locally on your own machine.
 
